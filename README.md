@@ -1,5 +1,5 @@
 # ENG1 Cohort 3 Group 10
----
+
 #### Goose Patrol
 
 Private repository for our Engineering 1 (COM00019I) team project at the University of York.
@@ -34,4 +34,4 @@ Listed with their licenses in `docs/Impl1.pdf`.
 
 ## Team
 
-Cohort 3, Group 10: [Vladislav Beer, Matthew Crossland, James Marchbank, Mani Keeble, Rob Pegrum, William George]
+Cohort 3, Group 10: Vladislav Beer, Matthew Crossland, James Marchbank, Mani Keeble, Rob Pegrum, William George
