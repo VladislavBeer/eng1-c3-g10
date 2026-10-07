@@ -34,4 +34,4 @@ Listed with their licenses in `docs/Impl1.pdf`.
 
 ## Team
 
-Cohort 3, Group 10: Vladislav Beer, Matthew Crossland, James Marchbank, Mani Keeble, Rob Pegrum, William George, Dima Tarasiuk
+Cohort 3, Group 10: Vladislav Beer, Matthew Crossland, James Marchbank, Mani Keeble, Rob Pegrum, William George (LaFive), Dima Tarasiuk
