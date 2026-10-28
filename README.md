@@ -31,7 +31,7 @@ To create an executable jar of your own, open Powershell, cd into the project ro
 The runnable JAR will be created at:
 ```lwjgl3\build\libs\GoosePatrol-1.0.0.jar```
 
-To run it:
+To run the JAR, use Powershell and paste the following:
 ```java -jar lwjgl3\build\libs\GoosePatrol-1.0.0.jar```
 
 ## Repository structure
