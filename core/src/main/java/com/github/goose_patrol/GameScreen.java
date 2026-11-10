@@ -30,8 +30,25 @@ public class GameScreen extends ScreenAdapter {
     // Placeholder player image; replace with the real character sprite later.
     private final Texture playerTexture = new Texture("libgdx.png");
 
+    // Timer logic
+    private float timeElapsed = 0;
+    private final float MAX_TIME = 300;
+    private boolean gameOver = false;
+
+
     @Override
     public void render(float delta) {
+        // Only update the timer if game is still active
+        if (!gameOver) {
+            timeElapsed += delta;
+
+            if (timeElapsed >= MAX_TIME){
+                gameOver = true;
+            }
+            
+            // ADD GAME OVER LOGIC HERE
+        }
+
         update(delta);
         draw();
     }
