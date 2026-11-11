@@ -20,6 +20,13 @@ public class RenderHandler extends ScreenAdapter {
     // Spacing of the placeholder grid lines that make scrolling visible. Take out once we have a proper map.
     private static final float GRID_SPACING = 100f;
 
+    // Timer logic
+    private float timeElapsed = 0;
+    private final float MAX_TIME = 300;
+    private boolean gameOver = false;
+
+    private long lastTick;
+
     private final Player player;
     private final RenderManager renderManager;
     private final OrthographicCamera camera = new OrthographicCamera();
@@ -34,6 +41,18 @@ public class RenderHandler extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+
+        // Only update the timer if game is still active
+        if (!gameOver) {
+
+            if (timeElapsed >= MAX_TIME){
+                gameOver = true;
+            }
+            
+            // ADD GAME OVER LOGIC HERE
+        }
+
+
         update(delta);
         draw();
     }
