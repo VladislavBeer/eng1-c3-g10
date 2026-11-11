@@ -71,6 +71,10 @@ public class RenderHandler extends ScreenAdapter {
         return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
     }
 
+    Vector3 getMousePosGaame() {
+        return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+    }
+
     @Override
     public void render(float delta) {
 
