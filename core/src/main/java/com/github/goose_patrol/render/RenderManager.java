@@ -2,10 +2,7 @@ package com.github.goose_patrol.render;
 
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.player.Player;
-import com.github.goose_patrol.render.button.Button;
-import com.github.goose_patrol.render.button.QuitButton;
-import com.github.goose_patrol.render.button.ResumeButton;
-import com.github.goose_patrol.render.button.StartButton;
+import com.github.goose_patrol.render.button.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +45,16 @@ public class RenderManager {
             buttonHeight));
         buttons.add(new QuitButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
             renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6),
+            buttonWidth,
+            buttonHeight));
+
+        // LOSE
+        buttons.add(new RetryButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
+            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12) - 20,
+            buttonWidth,
+            buttonHeight));
+        buttons.add(new LoseQuitButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
+            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6) - 20,
             buttonWidth,
             buttonHeight));
 
