@@ -19,15 +19,7 @@ public class GoosePatrol extends Game {
 
     @Override
     public void create() {
-        final float mapWidth = 1600f;
-        final float mapHeight = 1200f;
-        Player player = new Player(mapWidth / 2 - Player.WIDTH / 2, mapHeight / 2 - Player.HEIGHT / 2, null, "player/playere.png", this);
-        this.playerManager = new PlayerManager(player);
-        this.entityManager = new EntityManager(this);
-        this.entityManager.addEntity(player);
-        this.renderManager = new RenderManager(this, 1600f, 1200f, player);
-        this.STATE = State.PRE;
-        setScreen(renderManager.getRenderHandler());
+        init();
     }
 
     @Override
@@ -37,6 +29,20 @@ public class GoosePatrol extends Game {
             getScreen().dispose();
         }
         super.dispose();
+    }
+
+    public void init() {
+
+        final float mapWidth = 1600f;
+        final float mapHeight = 1200f;
+        Player player = new Player(mapWidth / 2 - Player.WIDTH / 2, mapHeight / 2 - Player.HEIGHT / 2, null, "player/playere.png", this);
+        this.playerManager = new PlayerManager(player);
+        this.entityManager = new EntityManager(this);
+        this.entityManager.addEntity(player);
+        this.renderManager = new RenderManager(this, 1600f, 1200f, player);
+        this.STATE = State.PRE;
+        setScreen(renderManager.getRenderHandler());
+
     }
 
     public EntityManager getEntityManager() {

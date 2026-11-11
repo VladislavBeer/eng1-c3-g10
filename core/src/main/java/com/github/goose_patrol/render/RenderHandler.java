@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -34,11 +35,14 @@ public class RenderHandler extends ScreenAdapter {
     private float timeElapsed = 0;
     private final float MAX_TIME = 300;
     private boolean gameOver = false;
+    private int ticksRemaining;
 
     private long lastTick;
 
+    private final BitmapFont font;
     private final Texture splashTexture;
     private final Texture pauseMenuTexture;
+    private final Texture loseMenuTexture;
     private final Texture resumeTexture;
     private final Texture quitTexture;
     private final Texture mapTexture;
@@ -53,11 +57,14 @@ public class RenderHandler extends ScreenAdapter {
         this.player = player;
         batch.setProjectionMatrix(camera.combined);
         viewport.apply();
+        this.font = new BitmapFont();
+        ticksRemaining = 6000;
         this.mapTexture = new Texture("static/map_base.png");
         this.splashTexture = new Texture("splash/splash.png");
         this.pauseMenuTexture = new Texture("splash/pause.png");
         this.resumeTexture = new Texture("splash/resume.png");
         this.quitTexture = new Texture("splash/quit.png");
+        this.loseMenuTexture = new Texture("splash/lose.png");
         this.renderManager = manager;
     }
 
@@ -80,10 +87,11 @@ public class RenderHandler extends ScreenAdapter {
        }
 
         long tickOffset = System.currentTimeMillis() - lastTick;
-        if (tickOffset >= 20L) {
+        if (tickOffset >= 50L) {
             // TICK
             update(delta);
             lastTick = System.currentTimeMillis();
+            ticksRemaining--;
         }
 
         // Only update the timer if game is still active
@@ -122,7 +130,7 @@ public class RenderHandler extends ScreenAdapter {
     // On press of WASD / arrow keys, moves the player
     private void update(float delta) {
 
-        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 
             this.renderManager.refreshButtons();
             renderManager.getInstance().STATE = State.PAUSE;
@@ -149,6 +157,12 @@ public class RenderHandler extends ScreenAdapter {
     private void renderSplashScreen() {
 
         batch.draw(splashTexture, camera.position.x - (camera.viewportWidth / 2), camera.position.y - (camera.viewportHeight / 2), camera.viewportWidth, camera.viewportHeight);
+
+    }
+
+    private void renderLoseScreen() {
+
+        batch.draw(loseMenuTexture, camera.position.x - (camera.viewportWidth / 4), camera.position.y - (camera.viewportHeight / 4), camera.viewportWidth / 2, camera.viewportHeight / 2);
 
     }
 
@@ -181,6 +195,25 @@ public class RenderHandler extends ScreenAdapter {
 
         }
 
+        if (renderManager.getInstance().STATE == State.LOSE) {
+
+            renderLoseScreen();
+            batch.setProjectionMatrix(camera.combined);
+            renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));
+            batch.end();
+            return;
+
+        }
+
+        if (ticksRemaining == 0) {
+
+            renderManager.getInstance().STATE = State.LOSE;
+            this.renderManager.refreshButtons();
+            batch.end();
+            return;
+
+        }
+
         // shapes.setProjectionMatrix(camera.combined); // turns world coords into screen positions
        // shapes.begin(ShapeType.Filled);
         // Walkable area (placeholder)
@@ -202,6 +235,15 @@ public class RenderHandler extends ScreenAdapter {
 
         // Render all entities in entity manager
         // This will INCLUDE all dynamic and static entities ie trees
+        int seconds = (int) Math.floor(ticksRemaining / 20f);
+        int minutes = (int) Math.floor(seconds / 60f);
+        int secondsAfterMinutes = seconds - (minutes * 60);
+
+        if (secondsAfterMinutes < 10)
+            font.draw(batch, minutes + ":0" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
+        else
+            font.draw(batch, minutes + ":" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
+
         batch.setProjectionMatrix(camera.combined);
         for (Entity e : renderManager.getInstance().getEntityManager().getEntities()) {
 
