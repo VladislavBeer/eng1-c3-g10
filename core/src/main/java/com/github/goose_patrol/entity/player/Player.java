@@ -29,7 +29,7 @@ public class Player extends Entity {
     // TODO
     @Override
     public void tickEntity() {
-
+        
 
         super.tickEntity();
 
