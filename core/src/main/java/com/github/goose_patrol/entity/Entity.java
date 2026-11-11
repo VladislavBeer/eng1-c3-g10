@@ -1,6 +1,7 @@
 package com.github.goose_patrol.entity;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.util.BoundingBox;
 
 public class Entity {
@@ -12,19 +13,29 @@ public class Entity {
     private BoundingBox entityBoundingBox;
     private boolean active;
     private final Texture entityTexture;
+    protected GoosePatrol instance;
 
-    public Entity(float posX, float posY, String image, boolean active, BoundingBox entityBoundingBox) {
+    // enum used to track direction of movement, for animation purposes.
+    protected enum directionState {
+        W, E, NW, N, NE, SW, S, SE
+    }
+    private directionState currentDirection;
+    private float stateTime; // Time spent in current state, for future animation purposes.
+
+
+    public Entity(float posX, float posY, String image, boolean active, BoundingBox entityBoundingBox, GoosePatrol instance) {
 
         this.posX = posX;
         this.posY = posY;
         this.image = image;
+        this.instance = instance;
         this.active = active;
         this.entityBoundingBox = entityBoundingBox;
         this.entityTexture = new Texture(image);
 
     }
 
-    public void tickEntity() {
+    public void tickEntity(float delta) {
 
     }
 
@@ -49,5 +60,14 @@ public class Entity {
     }
     
 
-
+    // additional getters and setters for tracking direction and state time, for animation purposes
+    public directionState getCurrentDirection() {
+        return currentDirection;
+    }
+    public void setCurrentDirection(directionState newDirection) {
+        this.currentDirection = newDirection;
+    }
+    public float getStateTime() {
+        return stateTime;   
+    }
 }
