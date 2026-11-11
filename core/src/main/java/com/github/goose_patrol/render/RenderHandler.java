@@ -3,6 +3,7 @@ package com.github.goose_patrol.render;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.entity.player.Player;
+import com.github.goose_patrol.render.button.Button;
 import com.github.goose_patrol.util.State;
 
 // Main gameplay screen: reads input, updates the player and draws the map and player.
@@ -31,20 +33,18 @@ public class RenderHandler extends ScreenAdapter {
     // Timer logic
     private float timeElapsed = 0;
     private final float MAX_TIME = 300;
-    private final float buttonX;
-    private final float buttonY;
-    private final float buttonWidth;
-    private final float buttonHeight;
     private boolean gameOver = false;
 
     private long lastTick;
 
     private final Texture splashTexture;
-    private final Texture startBtnTexture;
+    private final Texture pauseMenuTexture;
+    private final Texture resumeTexture;
+    private final Texture quitTexture;
     private final Texture mapTexture;
     private final Player player;
     private final RenderManager renderManager;
-    private final OrthographicCamera camera = new OrthographicCamera();
+    final OrthographicCamera camera = new OrthographicCamera();
     private final FitViewport viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
     private final ShapeRenderer shapes = new ShapeRenderer();
     private final SpriteBatch batch = new SpriteBatch();
@@ -55,31 +55,10 @@ public class RenderHandler extends ScreenAdapter {
         viewport.apply();
         this.mapTexture = new Texture("static/map_base.png");
         this.splashTexture = new Texture("splash/splash.png");
-        this.startBtnTexture = new Texture("splash/BtnStart.png");
-        this.buttonX = camera.position.x  - (camera.viewportWidth / 8);
-        this.buttonY = camera.position.y + 25 - (camera.viewportHeight / 2);
-        this.buttonWidth = (camera.position.x  + (camera.viewportWidth / 8)) - (camera.position.x  - (camera.viewportWidth / 8));
-        this.buttonHeight = camera.position.y + (camera.viewportHeight / 8);
+        this.pauseMenuTexture = new Texture("splash/pause.png");
+        this.resumeTexture = new Texture("splash/resume.png");
+        this.quitTexture = new Texture("splash/quit.png");
         this.renderManager = manager;
-    }
-
-    private void checkButtonClicked () {
-
-        float mouseX = getMousePosGaame().x;
-        float mouseY = getMousePosGaame().y;
-        if (mouseX > (buttonX + 20) && mouseX < (buttonX + buttonWidth - 20) && mouseY > (buttonY + 10) && mouseY < (buttonY + buttonHeight - 5)) {
-
-            Gdx.graphics.setSystemCursor(SystemCursor.Hand);
-            if (Gdx.input.isButtonPressed(0)) {
-                renderManager.getInstance().STATE = State.PLAYING;
-                Gdx.graphics.setSystemCursor(SystemCursor.Arrow);
-            }
-            return;
-
-        }
-
-        Gdx.graphics.setSystemCursor(SystemCursor.Arrow);
-
     }
 
     Vector3 getMousePosGaame() {
@@ -94,11 +73,12 @@ public class RenderHandler extends ScreenAdapter {
             We want to tick the game 20 times per second
             We can use the render method to do this
         */
-       if (renderManager.getInstance().STATE == State.PRE) {
+       if (renderManager.getInstance().STATE != State.PLAYING) {
             draw();
             checkButtonClicked();
             return;
        }
+
         long tickOffset = System.currentTimeMillis() - lastTick;
         if (tickOffset >= 20L) {
             // TICK
@@ -112,7 +92,7 @@ public class RenderHandler extends ScreenAdapter {
             if (timeElapsed >= MAX_TIME){
                 gameOver = true;
             }
-            
+
             // ADD GAME OVER LOGIC HERE
         }
 
@@ -120,10 +100,37 @@ public class RenderHandler extends ScreenAdapter {
         draw();
     }
 
+    private void checkButtonClicked () {
+
+        float mouseX = getMousePosGaame().x;
+        float mouseY = getMousePosGaame().y;
+        boolean hovering = false;
+        for (Button b : renderManager.getButtons()) {
+
+            boolean hoverSpecific = b.handleClick(mouseX, mouseY, renderManager);
+            if (!hovering && hoverSpecific)
+                hovering = true;
+
+        }
+
+        if (!hovering)
+            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
+
+
+    }
+
     // On press of WASD / arrow keys, moves the player
     private void update(float delta) {
 
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+
+            this.renderManager.refreshButtons();
+            renderManager.getInstance().STATE = State.PAUSE;
+            return;
+        }
+
         this.renderManager.getInstance().getEntityManager().tickEntities(delta);
+
 
         // Keep the player centred but if they try walk past the edge, reset their position before the render is updated.
         float halfWidth = viewport.getWorldWidth() / 2;
@@ -133,14 +140,15 @@ public class RenderHandler extends ScreenAdapter {
         camera.update();
     }
 
+    private void renderPauseMenu() {
+
+        batch.draw(pauseMenuTexture, camera.position.x - (camera.viewportWidth / 4), camera.position.y - (camera.viewportHeight / 4), camera.viewportWidth / 2, camera.viewportHeight / 2);
+
+    }
+
     private void renderSplashScreen() {
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
         batch.draw(splashTexture, camera.position.x - (camera.viewportWidth / 2), camera.position.y - (camera.viewportHeight / 2), camera.viewportWidth, camera.viewportHeight);
-        batch.draw(startBtnTexture, buttonX, buttonY, buttonWidth, buttonHeight);
-        batch.end();
-
 
     }
 
@@ -150,22 +158,35 @@ public class RenderHandler extends ScreenAdapter {
         ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1f);
         viewport.apply();
 
+        batch.begin();
+        batch.setProjectionMatrix(camera.combined);
+
         if (renderManager.getInstance().STATE == State.PRE) {
 
             renderSplashScreen();
+            batch.setProjectionMatrix(camera.combined);
+            renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));
+            batch.end();
             return;
 
         }
 
-       // shapes.setProjectionMatrix(camera.combined); // turns world coords into screen positions
+        if (renderManager.getInstance().STATE == State.PAUSE) {
+
+            renderPauseMenu();
+            batch.setProjectionMatrix(camera.combined);
+            renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));
+            batch.end();
+            return;
+
+        }
+
+        // shapes.setProjectionMatrix(camera.combined); // turns world coords into screen positions
        // shapes.begin(ShapeType.Filled);
         // Walkable area (placeholder)
        // shapes.setColor(0.2f, 0.6f, 0.2f, 1f);
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
         batch.draw(mapTexture, 0, 0, renderManager.getMaxX(), renderManager.getMaxY());
-        batch.end();
-       // shapes.rect(0, 0, renderManager.getMaxX(), renderManager.getMaxY());
+        // shapes.rect(0, 0, renderManager.getMaxX(), renderManager.getMaxY());
        // shapes.end();
 
         // Grid lines (placeholder scenery) so movement is visible
@@ -182,12 +203,12 @@ public class RenderHandler extends ScreenAdapter {
         // Render all entities in entity manager
         // This will INCLUDE all dynamic and static entities ie trees
         batch.setProjectionMatrix(camera.combined);
-        batch.begin();
         for (Entity e : renderManager.getInstance().getEntityManager().getEntities()) {
 
             batch.draw(e.getEntityTexture(), e.getPosX(), e.getPosY(), (e.getEntityBoundingBox().getMaxX() - e.getEntityBoundingBox().getMinX()), (e.getEntityBoundingBox().getMaxY() - e.getEntityBoundingBox().getMinY()));
 
         }
+        renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));
         batch.end();
     }
 
