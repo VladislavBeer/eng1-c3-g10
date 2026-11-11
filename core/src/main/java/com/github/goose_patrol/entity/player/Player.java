@@ -11,17 +11,20 @@ import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.util.BoundingBox;
 import com.github.goose_patrol.util.InventoryItem;
+import com.github.goose_patrol.util.HiddenEvent1;
 
 public class Player extends Entity {
 
-
-    /** Size of the player's body in world units (placeholder: same 6:1 shape as libgdx.png). */
+    /**
+     * Size of the player's body in world units (placeholder: same 6:1 shape as
+     * libgdx.png).
+     */
     public static final float WIDTH = 50f;
     public static final float HEIGHT = 60f;
     /** Walking speed in world units per second. */
     public static final float SPEED = 200f;
 
-    /** Map of direction states to their corresponding textures*/
+    /** Map of direction states to their corresponding textures */
     EnumMap<directionState, Texture> directionTextures = new EnumMap<>(directionState.class);
 
     private InventoryItem[] inventory;
@@ -33,7 +36,8 @@ public class Player extends Entity {
         this.inventory = initialInventory;
         this.heldItemNumber = 0;
 
-        // Load textures now to avoid doing it repeatedly later. This is a temporary solution until we implement an AssetManager.
+        // Load textures now to avoid doing it repeatedly later. This is a temporary
+        // solution until we implement an AssetManager.
         loadTextures();
 
     }
@@ -54,9 +58,8 @@ public class Player extends Entity {
 
     }
 
-    //TODO
+    // TODO
     public void moveEntity(float deltaX, float deltaY, float delta, float mapWidth, float mapHeight) {
-
 
         Vector2 direction = new Vector2(deltaX, deltaY);
         if (!direction.isZero()) {
@@ -78,7 +81,7 @@ public class Player extends Entity {
         this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
 
         // Update the current direction state based on movement
-        //Check if the player is moving in any direction
+        // Check if the player is moving in any direction
         boolean isMoving = Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0;
 
         // Update the player's state based on movement direction
@@ -88,26 +91,6 @@ public class Player extends Entity {
         } else {
             this.setCurrentDirection(directionState.S); // player is idle, set to south-facing direction
         }
-
-    }
-
-    //Load texture based on the current direction state of the player
-    @Override 
-    public Texture getEntityTexture() {
-        // Return the texture corresponding to the current direction state
-        return directionTextures.get(getCurrentDirection());
-    }
-
-    private void loadTextures() {
-        // Load textures for each direction state
-        // assets stored at 'eng1-c3-g10\assets\Entity\Player'
-        // Should be handled by AssetManager in future but for now we can just load them directly 
-        for (directionState d: directionState.values()) {
-            String texturePath = "player/Player" + d.name() + ".png";
-            Texture texture = new Texture(Gdx.files.internal(texturePath));
-            directionTextures.put(d, texture);
-        }
-    }
 
     // Helper method to determine the direction state 
     private directionState getDirectionState(float deltaX, float deltaY) {
@@ -129,6 +112,53 @@ public class Player extends Entity {
         return directionState.S; // default to south-facing if no movement
     }
 
+    // Load texture based on the current direction state of the player
+    @Override
+    public Texture getEntityTexture() {
+        // Return the texture corresponding to the current direction state
+        return directionTextures.get(getCurrentDirection());
+    }
+
+    private void loadTextures() {
+        // Load textures for each direction state
+        // assets stored at 'eng1-c3-g10\assets\Entity\Player'
+        // Should be handled by AssetManager in future but for now we can just load them
+        // directly
+        for (directionState d : directionState.values()) {
+            String texturePath = "player/Player" + d.name() + ".png";
+            Texture texture = new Texture(Gdx.files.internal(texturePath));
+            directionTextures.put(d, texture);
+        }
+    }
+
+    // Helper method to determine the direction state
+    private directionState getDirectionState(float deltaX, float deltaY) {
+
+        // Determine the sign of deltaX and deltaY to find the direction
+        // Should work if positive deltaY is north.
+        int signX = deltaX > 0 ? 1 : (deltaX < 0 ? -1 : 0);
+        int signY = deltaY > 0 ? 1 : (deltaY < 0 ? -1 : 0);
+
+        if (signX == 0 && signY > 0)
+            return directionState.N;
+        if (signX > 0 && signY > 0)
+            return directionState.NE;
+        if (signX < 0 && signY > 0)
+            return directionState.NW;
+        if (signX == 0 && signY < 0)
+            return directionState.S;
+        if (signX > 0 && signY < 0)
+            return directionState.SE;
+        if (signX < 0 && signY < 0)
+            return directionState.SW;
+        if (signX > 0 && signY == 0)
+            return directionState.E;
+        if (signX < 0 && signY == 0)
+            return directionState.W;
+
+        return directionState.S; // default to south-facing if no movement
+    }
+
     public float getCenterX() {
         return posX + WIDTH / 2;
     }
@@ -136,6 +166,5 @@ public class Player extends Entity {
     public float getCenterY() {
         return posY + HEIGHT / 2;
     }
-
 
 }
