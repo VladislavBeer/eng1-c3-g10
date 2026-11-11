@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Cursor;
-import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,8 +17,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.render.button.Button;
-import com.github.goose_patrol.util.HiddenEvent1;
-import com.github.goose_patrol.util.HiddenEvent2;
+import com.github.goose_patrol.event.HiddenEvent1;
+import com.github.goose_patrol.event.HiddenEvent2;
 import com.github.goose_patrol.util.State;
 
 // Main gameplay screen: reads input, updates the player and draws the map and player.
@@ -78,9 +76,6 @@ public class RenderHandler extends ScreenAdapter {
         return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
     }
 
-    Vector3 getMousePosGaame() {
-        return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-    }
 
     @Override
     public void render(float delta) {

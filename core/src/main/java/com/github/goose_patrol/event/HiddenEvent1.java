@@ -1,7 +1,9 @@
-package com.github.goose_patrol.util;
+package com.github.goose_patrol.event;
 
 import com.github.goose_patrol.entity.Goose;
 import com.github.goose_patrol.GoosePatrol;
+import com.github.goose_patrol.util.Event;
+
 import java.util.Random;
 
 public class HiddenEvent1 implements Event {

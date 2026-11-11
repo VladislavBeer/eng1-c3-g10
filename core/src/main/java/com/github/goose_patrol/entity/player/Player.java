@@ -11,7 +11,6 @@ import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.util.BoundingBox;
 import com.github.goose_patrol.util.InventoryItem;
-import com.github.goose_patrol.util.HiddenEvent1;
 
 public class Player extends Entity {
 
@@ -92,24 +91,6 @@ public class Player extends Entity {
             this.setCurrentDirection(directionState.S); // player is idle, set to south-facing direction
         }
 
-    // Helper method to determine the direction state 
-    private directionState getDirectionState(float deltaX, float deltaY) {
-        
-        // Determine the sign of deltaX and deltaY to find the direction
-        // Should work if positive deltaY is north.
-        int signX = deltaX > 0 ? 1 : (deltaX < 0 ? -1 : 0);
-        int signY = deltaY > 0 ? 1 : (deltaY < 0 ? -1 : 0);
-
-        if (signX == 0 && signY > 0) return directionState.N;
-        if (signX > 0 && signY > 0) return directionState.NE;
-        if (signX < 0 && signY > 0) return directionState.NW;
-        if (signX == 0 && signY < 0) return directionState.S;
-        if (signX > 0 && signY < 0) return directionState.SE;
-        if (signX < 0 && signY < 0) return directionState.SW;
-        if (signX > 0 && signY == 0) return directionState.E;
-        if (signX < 0 && signY == 0) return directionState.W;
-
-        return directionState.S; // default to south-facing if no movement
     }
 
     // Load texture based on the current direction state of the player
