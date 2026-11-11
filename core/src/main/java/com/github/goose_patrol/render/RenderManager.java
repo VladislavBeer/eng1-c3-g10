@@ -1,5 +1,6 @@
 package com.github.goose_patrol.render;
 
+import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.player.Player;
 
 public class RenderManager {
@@ -8,9 +9,11 @@ public class RenderManager {
     private final float maxX;
     private final float maxY;
     private RenderHandler renderHandler;
+    private GoosePatrol instance;
 
-    public RenderManager(float width, float height, Player player) {
+    public RenderManager(GoosePatrol instance, float width, float height, Player player) {
         this.maxX = width;
+        this.instance = instance;
         this.maxY = height;
         this.renderHandler = new RenderHandler(player, this);
     }
@@ -40,6 +43,10 @@ public class RenderManager {
 
     public RenderHandler getRenderHandler() {
         return this.renderHandler;
+    }
+
+    protected GoosePatrol getInstance() {
+        return this.instance;
     }
     
 

@@ -1,23 +1,30 @@
 package com.github.goose_patrol;
 
 import com.badlogic.gdx.Game;
+import com.github.goose_patrol.entity.EntityManager;
 import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.entity.player.PlayerManager;
 import com.github.goose_patrol.render.RenderManager;
+import com.github.goose_patrol.util.State;
 
-/** Entry point shared by all platforms. Starts the game on the {@link GameScreen}. */
+/** Entry point shared by all platforms. Starts the game on the {@link com.github.goose_patrol.render.RenderHandler}. */
 public class GoosePatrol extends Game {
 
     private RenderManager renderManager;
     private PlayerManager playerManager;
+    private EntityManager entityManager;
+    public State STATE;
 
     @Override
     public void create() {
         final float mapWidth = 1600f;
         final float mapHeight = 1200f;
-        Player player = new Player(mapWidth / 2 - Player.WIDTH / 2, mapHeight / 2 - Player.HEIGHT / 2, null, "libgdx.png");
+        Player player = new Player(mapWidth / 2 - Player.WIDTH / 2, mapHeight / 2 - Player.HEIGHT / 2, null, "player/playere.png", this);
         this.playerManager = new PlayerManager(player);
-        this.renderManager = new RenderManager(1600f, 1200f, player);
+        this.entityManager = new EntityManager(this);
+        this.entityManager.addEntity(player);
+        this.renderManager = new RenderManager(this, 1600f, 1200f, player);
+        this.STATE = State.PRE;
         setScreen(renderManager.getRenderHandler());
     }
 
@@ -29,4 +36,13 @@ public class GoosePatrol extends Game {
         }
         super.dispose();
     }
+
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
+
+    public RenderManager getRenderManager() {
+        return this.renderManager;
+    }
+
 }
