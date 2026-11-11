@@ -1,7 +1,10 @@
 package com.github.goose_patrol.entity.player;
 
+import java.util.EnumMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.github.goose_patrol.GoosePatrol;
@@ -18,6 +21,9 @@ public class Player extends Entity {
     /** Walking speed in world units per second. */
     public static final float SPEED = 200f;
 
+    /** Map of direction states to their corresponding textures*/
+    EnumMap<directionState, Texture> directionTextures = new EnumMap<>(directionState.class);
+
     private InventoryItem[] inventory;
     private int heldItemNumber;
 
@@ -26,6 +32,9 @@ public class Player extends Entity {
         super(posX, posY, image, true, new BoundingBox(posX, posX + WIDTH, posY, posY + HEIGHT), instance);
         this.inventory = initialInventory;
         this.heldItemNumber = 0;
+
+        // Load textures now to avoid doing it repeatedly later. This is a temporary solution until we implement an AssetManager.
+        loadTextures();
 
     }
 
@@ -68,7 +77,56 @@ public class Player extends Entity {
         this.getEntityBoundingBox().setMinY(this.posY);
         this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
 
+        // Update the current direction state based on movement
+        //Check if the player is moving in any direction
+        boolean isMoving = Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0;
 
+        // Update the player's state based on movement direction
+        if (isMoving) {
+            // player is moving, determine the direction based on deltaX and deltaY
+            this.setCurrentDirection(getDirectionState(deltaX, deltaY));
+        } else {
+            this.setCurrentDirection(directionState.S); // player is idle, set to south-facing direction
+        }
+
+    }
+
+    //Load texture based on the current direction state of the player
+    @Override 
+    public Texture getEntityTexture() {
+        // Return the texture corresponding to the current direction state
+        return directionTextures.get(getCurrentDirection());
+    }
+
+    private void loadTextures() {
+        // Load textures for each direction state
+        // assets stored at 'eng1-c3-g10\assets\Entity\Player'
+        // Should be handled by AssetManager in future but for now we can just load them directly 
+        for (directionState d: directionState.values()) {
+            String texturePath = "player/Player" + d.name() + ".png";
+            Texture texture = new Texture(Gdx.files.internal(texturePath));
+            directionTextures.put(d, texture);
+        }
+    }
+
+    // Helper method to determine the direction state 
+    private directionState getDirectionState(float deltaX, float deltaY) {
+        
+        // Determine the sign of deltaX and deltaY to find the direction
+        // Should work if positive deltaY is north.
+        int signX = deltaX > 0 ? 1 : (deltaX < 0 ? -1 : 0);
+        int signY = deltaY > 0 ? 1 : (deltaY < 0 ? -1 : 0);
+
+        if (signX == 0 && signY > 0) return directionState.N;
+        if (signX > 0 && signY > 0) return directionState.NE;
+        if (signX < 0 && signY > 0) return directionState.NW;
+        if (signX == 0 && signY < 0) return directionState.S;
+        if (signX > 0 && signY < 0) return directionState.SE;
+        if (signX < 0 && signY < 0) return directionState.SW;
+        if (signX > 0 && signY == 0) return directionState.E;
+        if (signX < 0 && signY == 0) return directionState.W;
+
+        return directionState.S; // default to south-facing if no movement
     }
 
     public float getCenterX() {

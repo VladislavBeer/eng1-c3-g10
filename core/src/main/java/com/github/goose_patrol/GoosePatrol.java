@@ -1,6 +1,7 @@
 package com.github.goose_patrol;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
 import com.github.goose_patrol.entity.EntityManager;
 import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.entity.player.PlayerManager;
@@ -13,6 +14,7 @@ public class GoosePatrol extends Game {
     private RenderManager renderManager;
     private PlayerManager playerManager;
     private EntityManager entityManager;
+    private AssetManager assetManager;
     public State STATE;
 
     @Override

@@ -15,6 +15,14 @@ public class Entity {
     private final Texture entityTexture;
     protected GoosePatrol instance;
 
+    // enum used to track direction of movement, for animation purposes.
+    protected enum directionState {
+        W, E, NW, N, NE, SW, S, SE
+    }
+    private directionState currentDirection;
+    private float stateTime; // Time spent in current state, for future animation purposes.
+
+
     public Entity(float posX, float posY, String image, boolean active, BoundingBox entityBoundingBox, GoosePatrol instance) {
 
         this.posX = posX;
@@ -52,5 +60,14 @@ public class Entity {
     }
     
 
-
+    // additional getters and setters for tracking direction and state time, for animation purposes
+    public directionState getCurrentDirection() {
+        return currentDirection;
+    }
+    public void setCurrentDirection(directionState newDirection) {
+        this.currentDirection = newDirection;
+    }
+    public float getStateTime() {
+        return stateTime;   
+    }
 }
