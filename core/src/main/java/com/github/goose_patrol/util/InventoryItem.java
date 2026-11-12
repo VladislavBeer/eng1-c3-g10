@@ -8,15 +8,18 @@ public class InventoryItem {
     private String imageItem;
     private Optional<Event> useEvent;
 
-    
+
 
     public InventoryItem(String name, String imageItem) {
         this.name = name;
         this.imageItem = imageItem;
+        this.useEvent = Optional.empty();
     }
 
 
     public void useItem() {
+
+        getUseEvent().get().fire();
 
     }
 

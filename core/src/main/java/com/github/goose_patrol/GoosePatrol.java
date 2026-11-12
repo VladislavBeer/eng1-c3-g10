@@ -1,6 +1,7 @@
 package com.github.goose_patrol;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.github.goose_patrol.entity.EntityManager;
 import com.github.goose_patrol.entity.player.Player;
@@ -36,13 +37,14 @@ public class GoosePatrol extends Game {
 
         final float mapWidth = 1600f;
         final float mapHeight = 1200f;
-        Player player = new Player(mapWidth / 2 - Player.WIDTH / 2, mapHeight / 2 - Player.HEIGHT / 2, new InventoryItem[]{new InventoryItem("Bread","Items/bread.png"),new InventoryItem("Phone","Items/music_phone.png"),null,null}, "player/playere.png", this);
+        Player player = new Player(20, 150, new InventoryItem[]{new InventoryItem("Bread","Items/bread.png"),new InventoryItem("Phone","Items/music_phone.png"),null,null}, "player/playere.png", this);
         this.playerManager = new PlayerManager(player);
         this.entityManager = new EntityManager(this);
         this.entityManager.addEntity(player);
         this.renderManager = new RenderManager(this, 1600f, 1200f, player);
         this.STATE = State.PRE;
         setScreen(renderManager.getRenderHandler());
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
     }
 

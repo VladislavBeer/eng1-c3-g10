@@ -9,8 +9,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.Entity;
+import com.github.goose_patrol.util.Area;
 import com.github.goose_patrol.util.BoundingBox;
 import com.github.goose_patrol.util.InventoryItem;
+import com.github.goose_patrol.util.MapHelper;
 
 public class Player extends Entity {
 
@@ -21,7 +23,7 @@ public class Player extends Entity {
     public static final float WIDTH = 50f;
     public static final float HEIGHT = 60f;
     /** Walking speed in world units per second. */
-    public static final float SPEED = 200f;
+    public static float SPEED = 200f;
 
     /** Map of direction states to their corresponding textures */
     EnumMap<directionState, Texture> directionTextures = new EnumMap<>(directionState.class);
@@ -59,7 +61,7 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Keys.NUM_2)) heldItemNumber = 1;
         if (Gdx.input.isKeyPressed(Keys.NUM_3)) heldItemNumber = 2;
         if (Gdx.input.isKeyPressed(Keys.NUM_4)) heldItemNumber = 3;
-        if (Gdx.input.isKeyPressed(Keys.ENTER) && heldItemNumber >=0 && inventory != null && inventory[heldItemNumber] != null)
+        if (Gdx.input.isKeyPressed(Keys.ENTER) && heldItemNumber >=0 && inventory != null && inventory[heldItemNumber] != null && inventory[heldItemNumber].getUseEvent().isPresent())
         {
             inventory[heldItemNumber].useItem(); //use the corresponding item if available
             inventory[heldItemNumber] = null; // Remove the item from the inventory after use
@@ -77,9 +79,22 @@ public class Player extends Entity {
         Vector2 position = new Vector2();
         position.x = posX;
         position.y = posY;
+        Area currentArea = MapHelper.getCurrentArea(position.x, position.y);
+        if (currentArea == Area.GRASS)
+            SPEED = 100f;
+        else
+            SPEED = 200f;
         position.mulAdd(direction, SPEED * delta);
         position.x = MathUtils.clamp(position.x, 0, mapWidth - WIDTH);
         position.y = MathUtils.clamp(position.y, 0, mapHeight - HEIGHT);
+
+        Area moveIntoArea = MapHelper.getCurrentArea(position.x, position.y);
+        if (moveIntoArea == Area.LAKE) {
+
+            position.x = posX;
+            position.y = posY;
+
+        }
 
         this.posX = position.x;
         this.posY = position.y;
