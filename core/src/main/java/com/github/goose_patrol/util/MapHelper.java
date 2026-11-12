@@ -1,5 +1,9 @@
 package com.github.goose_patrol.util;
 
+import com.github.goose_patrol.entity.Entity;
+import com.github.goose_patrol.entity.EntityManager;
+import com.github.goose_patrol.entity.Goose;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +22,33 @@ public class MapHelper {
         Map.entry(PATH_LOWER_CORNER, Area.PATH)
     );
 
+
+    public static boolean isColliding(EntityManager em, BoundingBox eb, Entity primEntity) {
+
+
+        for (Entity e : em.getEntities()) {
+
+            if (primEntity.equals(e)) continue;
+            // We offset the bounding box to account for difference in image size and bounding box of the geese
+            BoundingBox b = e.getEntityBoundingBox().clone();
+            if (e instanceof Goose) {
+                b.setMinX(b.getMinX() + 25);
+                b.setMaxX(b.getMaxX() - 25);
+                b.setMinY(b.getMinY() + 5);
+                b.setMaxY(b.getMaxY() - 5);
+            }
+
+            if (eb.getMinX() < b.getMaxX() &&
+                eb.getMaxX() > b.getMinX() &&
+                eb.getMinY() < b.getMaxY() &&
+                eb.getMaxY() > b.getMinY())
+                return true;
+
+        }
+
+        return false;
+
+    }
 
     public static Area getCurrentArea(float posX, float posY) {
 

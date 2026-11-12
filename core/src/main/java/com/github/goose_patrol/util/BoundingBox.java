@@ -27,22 +27,30 @@ public class BoundingBox {
         return maxY;
     }
 
-    public void setMinX(float minX) {
+    public BoundingBox setMinX(float minX) {
         this.minX = minX;
+        return this;
     }
 
-    public void setMaxX(float maxX) {
+    public BoundingBox setMaxX(float maxX) {
         this.maxX = maxX;
+        return this;
     }
 
-    public void setMinY(float minY) {
+    public BoundingBox setMinY(float minY) {
         this.minY = minY;
+        return this;
     }
 
-    public void setMaxY(float maxY) {
+    public BoundingBox setMaxY(float maxY) {
         this.maxY = maxY;
+        return this;
     }
 
-    
+    public BoundingBox clone() {
+
+        return new BoundingBox(minX, maxX, minY, maxY);
+
+    }
 
 }

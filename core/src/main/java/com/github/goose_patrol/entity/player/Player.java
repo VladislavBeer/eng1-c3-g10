@@ -88,6 +88,19 @@ public class Player extends Entity {
         position.x = MathUtils.clamp(position.x, 0, mapWidth - WIDTH);
         position.y = MathUtils.clamp(position.y, 0, mapHeight - HEIGHT);
 
+        // Handles entity collisions
+        BoundingBox newBoundingBox = getEntityBoundingBox().clone();
+        newBoundingBox.setMinX(newBoundingBox.getMinX() + deltaX);
+        newBoundingBox.setMinY(newBoundingBox.getMinY() + deltaY);
+        newBoundingBox.setMaxX(newBoundingBox.getMaxX() + deltaX);
+        newBoundingBox.setMaxY(newBoundingBox.getMaxY() + deltaY);
+        if (MapHelper.isColliding(instance.getEntityManager(), newBoundingBox, this)) {
+
+            position.x = posX;
+            position.y = posY;
+
+        }
+
         Area moveIntoArea = MapHelper.getCurrentArea(position.x, position.y);
         if (moveIntoArea == Area.LAKE) {
 
