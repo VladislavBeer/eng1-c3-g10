@@ -6,6 +6,7 @@ import com.github.goose_patrol.entity.EntityManager;
 import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.entity.player.PlayerManager;
 import com.github.goose_patrol.render.RenderManager;
+import com.github.goose_patrol.util.InventoryItem;
 import com.github.goose_patrol.util.State;
 
 /** Entry point shared by all platforms. Starts the game on the {@link com.github.goose_patrol.render.RenderHandler}. */
@@ -35,7 +36,7 @@ public class GoosePatrol extends Game {
 
         final float mapWidth = 1600f;
         final float mapHeight = 1200f;
-        Player player = new Player(mapWidth / 2 - Player.WIDTH / 2, mapHeight / 2 - Player.HEIGHT / 2, null, "player/playere.png", this);
+        Player player = new Player(mapWidth / 2 - Player.WIDTH / 2, mapHeight / 2 - Player.HEIGHT / 2, new InventoryItem[]{new InventoryItem("Bread","Items/bread.png"),new InventoryItem("Phone","Items/music_phone.png"),null,null}, "player/playere.png", this);
         this.playerManager = new PlayerManager(player);
         this.entityManager = new EntityManager(this);
         this.entityManager.addEntity(player);

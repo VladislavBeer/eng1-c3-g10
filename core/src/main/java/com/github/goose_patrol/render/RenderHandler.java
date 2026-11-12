@@ -263,6 +263,26 @@ public class RenderHandler extends ScreenAdapter {
 
         }
         renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));
+
+        //Inventory
+        //batch.draw(new Texture("inventory_Frame.png"),camera.position.x-(100),camera.position.y-(camera.viewportHeight/2)+10,200,50); // Drawwing the inventory frame
+
+        if (player.getInventory() != null)
+        {
+            for(int i =0;i<player.getInventory().length;i++){ // Drawing the items in the inventory
+                if (player.Inventory_Slot_Selected == i)
+                {
+                    batch.draw(new Texture("Inventory/slot_selected.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                }
+                else
+                {
+                    batch.draw(new Texture("Inventory/slot_normal.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                }
+                if(player.getInventory()[i] != null){
+                    batch.draw(new Texture(player.getInventory()[i].getImageItem()),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                }
+            }
+        }
         batch.end();
         System.out.println(renderManager.getInstance().getEntityManager().getEntities());
     }
