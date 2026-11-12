@@ -270,7 +270,7 @@ public class RenderHandler extends ScreenAdapter {
         if (player.getInventory() != null)
         {
             for(int i =0;i<player.getInventory().length;i++){ // Drawing the items in the inventory
-                if (player.Inventory_Slot_Selected == i)
+                if (player.getHeldItem() == i)
                 {
                     batch.draw(new Texture("Inventory/slot_selected.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
                 }
@@ -284,7 +284,6 @@ public class RenderHandler extends ScreenAdapter {
             }
         }
         batch.end();
-        System.out.println(renderManager.getInstance().getEntityManager().getEntities());
     }
 
     @Override

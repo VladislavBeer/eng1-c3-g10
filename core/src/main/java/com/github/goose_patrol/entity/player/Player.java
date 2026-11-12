@@ -27,7 +27,6 @@ public class Player extends Entity {
     EnumMap<directionState, Texture> directionTextures = new EnumMap<>(directionState.class);
 
     private InventoryItem[] inventory;
-    public int Inventory_Slot_Selected=-1;
     private int heldItemNumber;
 
     public Player(float posX, float posY, InventoryItem[] initialInventory, String image, GoosePatrol instance) {
@@ -55,21 +54,20 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) dirY += 1;
         moveEntity(dirX, dirY, delta, this.instance.getRenderManager().getMaxX(), this.instance.getRenderManager().getMaxY());
 
-        // Check for inventory slot key presses (1-4) 
-        if (Gdx.input.isKeyPressed(Keys.NUM_1)) Inventory_Slot_Selected = 0;
-        if (Gdx.input.isKeyPressed(Keys.NUM_2)) Inventory_Slot_Selected = 1;
-        if (Gdx.input.isKeyPressed(Keys.NUM_3)) Inventory_Slot_Selected = 2;
-        if (Gdx.input.isKeyPressed(Keys.NUM_4)) Inventory_Slot_Selected = 3;
-        if (Gdx.input.isKeyPressed(Keys.ENTER) && Inventory_Slot_Selected>=0 && inventory != null && inventory[Inventory_Slot_Selected] != null) 
+        // Check for inventory slot key presses (1-4)
+        if (Gdx.input.isKeyPressed(Keys.NUM_1)) heldItemNumber = 0;
+        if (Gdx.input.isKeyPressed(Keys.NUM_2)) heldItemNumber = 1;
+        if (Gdx.input.isKeyPressed(Keys.NUM_3)) heldItemNumber = 2;
+        if (Gdx.input.isKeyPressed(Keys.NUM_4)) heldItemNumber = 3;
+        if (Gdx.input.isKeyPressed(Keys.ENTER) && heldItemNumber >=0 && inventory != null && inventory[heldItemNumber] != null)
         {
-            inventory[Inventory_Slot_Selected].useItem(); //use the corresponding item if available
-            inventory[Inventory_Slot_Selected] = null; // Remove the item from the inventory after use
+            inventory[heldItemNumber].useItem(); //use the corresponding item if available
+            inventory[heldItemNumber] = null; // Remove the item from the inventory after use
         }
         super.tickEntity(delta);
 
     }
 
-    // TODO
     public void moveEntity(float deltaX, float deltaY, float delta, float mapWidth, float mapHeight) {
 
         Vector2 direction = new Vector2(deltaX, deltaY);
@@ -154,6 +152,12 @@ public class Player extends Entity {
 
     public float getCenterX() {
         return posX + WIDTH / 2;
+    }
+
+    public int getHeldItem() {
+
+        return this.heldItemNumber;
+
     }
 
     public float getCenterY() {
