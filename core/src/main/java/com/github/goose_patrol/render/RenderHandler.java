@@ -46,10 +46,18 @@ public class RenderHandler extends ScreenAdapter {
     private final Texture resumeTexture;
     private final Texture quitTexture;
     private final Texture mapTexture;
+    private final Texture buildingTexture;
     private final Player player;
     private final RenderManager renderManager;
     private final HiddenEvent1 hiddenEvent1;
     private final HiddenEvent2 hiddenEvent2;
+    private final Texture busStopTexture;
+    private final Texture tree1Texture;
+    private final Texture tree2Texture;
+    private final Texture tree3Texture;
+    private final Texture tree4Texture;
+    private final Texture tree5Texture;
+    private final Texture tree6Texture;
     final OrthographicCamera camera = new OrthographicCamera();
     private final FitViewport viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
     private final ShapeRenderer shapes = new ShapeRenderer();
@@ -70,6 +78,14 @@ public class RenderHandler extends ScreenAdapter {
         this.renderManager = manager;
         this.hiddenEvent1 = new HiddenEvent1(manager.getInstance());
         this.hiddenEvent2 = new HiddenEvent2(manager.getInstance());
+        this.buildingTexture = new Texture("static/building.png");
+        this.busStopTexture = new Texture("static/bus_stop.png");
+        this.tree1Texture = new Texture("static/Tree1.png");
+        this.tree2Texture = new Texture("static/Tree2.png");
+        this.tree3Texture = new Texture("static/Tree3.png");
+        this.tree4Texture = new Texture("static/Tree4.png");
+        this.tree5Texture = new Texture("static/Tree5.png");
+        this.tree6Texture = new Texture("static/Tree6.png");
     }
 
     Vector3 getMousePosGaame() {
@@ -245,6 +261,40 @@ public class RenderHandler extends ScreenAdapter {
 
         // Render all entities in entity manager
         // This will INCLUDE all dynamic and static entities ie trees
+        //buildings
+        batch.draw(buildingTexture, 75, 1040, 300, 150);
+        batch.draw(busStopTexture, 75, 225, 200, 100);
+        //trees
+        batch.draw(tree1Texture,10, 230, 80, 150);
+        batch.draw(tree1Texture, 275, 230, 70, 160);
+
+        batch.draw(tree1Texture, 1375, 100, 70, 160);
+        batch.draw(tree1Texture, 1450, 170, 70, 160);
+        batch.draw(tree1Texture, 1490, 50, 70, 160);
+        // oak trees
+        batch.draw(tree2Texture, 1300, 1100, 90, 100);
+        // Trees around the lake edges
+        batch.draw(tree3Texture, 575, 330, 78, 90);
+        batch.draw(tree3Texture, 760, 370, 81, 100);
+        batch.draw(tree3Texture, 1000, 450, 82, 70);
+        batch.draw(tree3Texture, 1220, 650, 76, 80);
+        // birch trees
+        batch.draw(tree4Texture, 1000, 800, 90, 150);
+        batch.draw(tree4Texture, 1090, 750, 100, 160);
+        batch.draw(tree4Texture, 1170, 820, 110, 110);
+        // mangrove trees
+        batch.draw(tree5Texture, 1200, 290, 80, 75);
+        batch.draw(tree5Texture, 1000, 360, 80, 100);
+        batch.draw(tree5Texture, 1156, 420, 80, 75);
+
+        // cherry blossom trees
+        batch.draw(tree6Texture, 190, 800, 120, 140);
+        batch.draw(tree6Texture, 325, 820, 110, 130);
+        batch.draw(tree6Texture, 430, 1080, 90, 110);
+        batch.draw(tree6Texture, 550, 1090, 90, 105);
+        batch.draw(tree6Texture, 700, 1070, 85, 100);
+        batch.draw(tree6Texture, 890, 1100, 80, 90);
+
         int seconds = (int) Math.floor(ticksRemaining / 20f);
         int minutes = (int) Math.floor(seconds / 60f);
         int secondsAfterMinutes = seconds - (minutes * 60);
