@@ -9,10 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.Entity;
-import com.github.goose_patrol.util.Area;
-import com.github.goose_patrol.util.BoundingBox;
-import com.github.goose_patrol.util.InventoryItem;
-import com.github.goose_patrol.util.MapHelper;
+import com.github.goose_patrol.util.*;
 
 public class Player extends Entity {
 
@@ -94,10 +91,18 @@ public class Player extends Entity {
         newBoundingBox.setMinY(newBoundingBox.getMinY() + deltaY);
         newBoundingBox.setMaxX(newBoundingBox.getMaxX() + deltaX);
         newBoundingBox.setMaxY(newBoundingBox.getMaxY() + deltaY);
-        if (MapHelper.isColliding(instance.getEntityManager(), newBoundingBox, this)) {
+        if (MapHelper.isColliding(instance.getEntityManager(), newBoundingBox, this) == 1) {
 
             position.x = posX;
             position.y = posY;
+
+        }
+
+        if (MapHelper.isColliding(instance.getEntityManager(), newBoundingBox, this) == 2) {
+
+            instance.getRenderManager().refreshButtons();
+            instance.STATE = State.WIN;
+            return;
 
         }
 
@@ -116,9 +121,6 @@ public class Player extends Entity {
         this.getEntityBoundingBox().setMaxX(this.posX + WIDTH);
         this.getEntityBoundingBox().setMinY(this.posY);
         this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
-
-        System.out.println("X: " + posX);
-        System.out.println("Y: " + posY);
 
         // Update the current direction state based on movement
         // Check if the player is moving in any direction

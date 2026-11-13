@@ -3,6 +3,7 @@ package com.github.goose_patrol.util;
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.entity.EntityManager;
 import com.github.goose_patrol.entity.Goose;
+import com.github.goose_patrol.entity.staticentity.building.BusStopEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class MapHelper {
     );
 
 
-    public static boolean isColliding(EntityManager em, BoundingBox eb, Entity primEntity) {
+    public static int isColliding(EntityManager em, BoundingBox eb, Entity primEntity) {
 
 
         for (Entity e : em.getEntities()) {
@@ -38,15 +39,30 @@ public class MapHelper {
                 b.setMaxY(b.getMaxY() - 5);
             }
 
+            if (e instanceof BusStopEntity) {
+                b.setMinX(b.getMinX() + 10);
+                b.setMaxX(b.getMaxX() - 10);
+                b.setMinY(b.getMinY() + 20);
+                b.setMaxY(b.getMaxY() + 10);
+            }
+
             if (eb.getMinX() < b.getMaxX() &&
                 eb.getMinY() > b.getMinX() &&
                 eb.getMinY() < b.getMaxY() &&
-                eb.getMinY() > b.getMinY())
-                return true;
+                eb.getMinY() > b.getMinY()) {
+
+                if (e instanceof BusStopEntity) {
+
+                    return 2;
+
+                }
+
+                return 1;
+            }
 
         }
 
-        return false;
+        return 0;
 
     }
 

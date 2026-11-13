@@ -48,6 +48,16 @@ public class RenderManager {
             buttonWidth,
             buttonHeight));
 
+        // WIN
+        buttons.add(new RetryWinButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
+            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12) - 20,
+            buttonWidth,
+            buttonHeight));
+        buttons.add(new WinQuitButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
+            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6) - 20,
+            buttonWidth,
+            buttonHeight));
+
         // LOSE
         buttons.add(new RetryButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
             renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12) - 20,
