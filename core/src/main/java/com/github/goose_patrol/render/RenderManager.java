@@ -60,20 +60,6 @@ public class RenderManager {
 
     }
 
-    //TODO
-    public void renderMap() {
-
-    }
-
-    //TODO
-    public void renderPlayerOverlay() {
-
-    }
-
-    //TODO
-    public void renderEntities() {
-
-    }
 
     public List<Button> getButtons() {
         return buttons;

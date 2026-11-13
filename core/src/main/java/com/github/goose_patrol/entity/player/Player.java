@@ -23,7 +23,7 @@ public class Player extends Entity {
     public static final float WIDTH = 50f;
     public static final float HEIGHT = 60f;
     /** Walking speed in world units per second. */
-    public static float SPEED = 200f;
+    public static float SPEED = 1000f;
 
     /** Map of direction states to their corresponding textures */
     EnumMap<directionState, Texture> directionTextures = new EnumMap<>(directionState.class);
