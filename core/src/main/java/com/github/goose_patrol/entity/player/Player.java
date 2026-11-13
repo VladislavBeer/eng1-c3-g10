@@ -140,7 +140,7 @@ public class Player extends Entity {
 
     private void loadTextures() {
         // Load textures for each direction state
-        // assets stored at 'eng1-c3-g10\assets\Entity\Player'
+        // assets stored at 'eng1-c3-g10\assets\Player'
         // Should be handled by AssetManager in future but for now we can just load them
         // directly
         for (directionState d : directionState.values()) {
@@ -154,7 +154,7 @@ public class Player extends Entity {
     private directionState getDirectionState(float deltaX, float deltaY) {
 
         // Determine the sign of deltaX and deltaY to find the direction
-        // Should work if positive deltaY is north.
+        // Works as positive deltaY is north.
         int signX = deltaX > 0 ? 1 : (deltaX < 0 ? -1 : 0);
         int signY = deltaY > 0 ? 1 : (deltaY < 0 ? -1 : 0);
 
