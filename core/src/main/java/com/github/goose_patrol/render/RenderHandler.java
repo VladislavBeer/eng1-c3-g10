@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.render.button.Button;
@@ -313,7 +315,9 @@ public class RenderHandler extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         for (Entity e : renderManager.getInstance().getEntityManager().getEntities()) {
 
-            batch.draw(e.getEntityTexture(), e.getPosX(), e.getPosY(),
+            TextureRegion entityTexture = e.getEntityTexture();
+            if (entityTexture == null) continue; // Skip rendering if the texture is null
+            batch.draw(e.getEntityTexture().getTexture(), e.getPosX(), e.getPosY(),
                     (e.getEntityBoundingBox().getMaxX() - e.getEntityBoundingBox().getMinX()),
                     (e.getEntityBoundingBox().getMaxY() - e.getEntityBoundingBox().getMinY()));
 
@@ -359,6 +363,6 @@ public class RenderHandler extends ScreenAdapter {
     public void dispose() {
         shapes.dispose();
         batch.dispose();
-        player.getEntityTexture().dispose();
+        player.disposeTextures();
     }
 }
