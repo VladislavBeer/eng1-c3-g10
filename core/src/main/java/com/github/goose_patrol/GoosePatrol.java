@@ -1,16 +1,23 @@
 package com.github.goose_patrol;
 
+import java.util.Optional;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.github.goose_patrol.entity.EntityManager;
 import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.entity.player.PlayerManager;
+import com.github.goose_patrol.event.HiddenEvent1;
+import com.github.goose_patrol.event.HiddenEvent2;
 import com.github.goose_patrol.render.RenderManager;
 import com.github.goose_patrol.util.InventoryItem;
 import com.github.goose_patrol.util.State;
 
-/** Entry point shared by all platforms. Starts the game on the {@link com.github.goose_patrol.render.RenderHandler}. */
+/**
+ * Entry point shared by all platforms. Starts the game on the
+ * {@link com.github.goose_patrol.render.RenderHandler}.
+ */
 public class GoosePatrol extends Game {
 
     private RenderManager renderManager;
@@ -37,7 +44,10 @@ public class GoosePatrol extends Game {
 
         final float mapWidth = 1600f;
         final float mapHeight = 1200f;
-        Player player = new Player(20, 150, new InventoryItem[]{new InventoryItem("Bread","Items/bread.png"),new InventoryItem("Phone","Items/music_phone.png"),null,null}, "player/playere.png", this);
+        Player player = new Player(20, 150, new InventoryItem[] {
+                new InventoryItem("Bread", "Items/bread.png", Optional.of(new HiddenEvent1(this))),
+                new InventoryItem("Phone", "Items/music_phone.png", Optional.of(new HiddenEvent2(this))), null, null },
+                "player/playere.png", this);
         this.playerManager = new PlayerManager(player);
         this.entityManager = new EntityManager(this);
         this.entityManager.addEntity(player);
