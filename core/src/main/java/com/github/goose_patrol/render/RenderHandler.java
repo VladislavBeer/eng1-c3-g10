@@ -290,14 +290,6 @@ public class RenderHandler extends ScreenAdapter {
 //        batch.draw(tree6Texture, 700, 1070, 85, 100);
 //        batch.draw(tree6Texture, 890, 1100, 80, 90);
 
-        int seconds = (int) Math.floor(ticksRemaining / 20f);
-        int minutes = (int) Math.floor(seconds / 60f);
-        int secondsAfterMinutes = seconds - (minutes * 60);
-
-        if (secondsAfterMinutes < 10)
-            font.draw(batch, minutes + ":0" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
-        else
-            font.draw(batch, minutes + ":" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
 
         batch.setProjectionMatrix(camera.combined);
         for (Entity e : renderManager.getInstance().getEntityManager().getEntities()) {
@@ -309,6 +301,14 @@ public class RenderHandler extends ScreenAdapter {
         }
         renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));
 
+        int seconds = (int) Math.floor(ticksRemaining / 20f);
+        int minutes = (int) Math.floor(seconds / 60f);
+        int secondsAfterMinutes = seconds - (minutes * 60);
+
+        if (secondsAfterMinutes < 10)
+            font.draw(batch, minutes + ":0" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
+        else
+            font.draw(batch, minutes + ":" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
         //Inventory
         //batch.draw(new Texture("inventory_Frame.png"),camera.position.x-(100),camera.position.y-(camera.viewportHeight/2)+10,200,50); // Drawwing the inventory frame
 

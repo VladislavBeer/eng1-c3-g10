@@ -117,6 +117,9 @@ public class Player extends Entity {
         this.getEntityBoundingBox().setMinY(this.posY);
         this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
 
+        System.out.println("X: " + posX);
+        System.out.println("Y: " + posY);
+
         // Update the current direction state based on movement
         // Check if the player is moving in any direction
         boolean isMoving = Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0;

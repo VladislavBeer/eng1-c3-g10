@@ -39,9 +39,9 @@ public class MapHelper {
             }
 
             if (eb.getMinX() < b.getMaxX() &&
-                eb.getMaxX() > b.getMinX() &&
+                eb.getMinY() > b.getMinX() &&
                 eb.getMinY() < b.getMaxY() &&
-                eb.getMaxY() > b.getMinY())
+                eb.getMinY() > b.getMinY())
                 return true;
 
         }
