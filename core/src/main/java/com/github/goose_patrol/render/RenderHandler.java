@@ -317,9 +317,22 @@ public class RenderHandler extends ScreenAdapter {
 
             TextureRegion entityTexture = e.getEntityTexture();
             if (entityTexture == null) continue; // Skip rendering if the texture is null
-            batch.draw(e.getEntityTexture().getTexture(), e.getPosX(), e.getPosY(),
-                    (e.getEntityBoundingBox().getMaxX() - e.getEntityBoundingBox().getMinX()),
-                    (e.getEntityBoundingBox().getMaxY() - e.getEntityBoundingBox().getMinY()));
+
+            if (e.isStatic()) {
+                batch.draw(entityTexture.getTexture(), e.getPosX(), e.getPosY(),
+                        (e.getEntityBoundingBox().getMaxX() - e.getEntityBoundingBox().getMinX()),
+                        (e.getEntityBoundingBox().getMaxY() - e.getEntityBoundingBox().getMinY()));
+            } 
+            else {
+                // For dynamic entities, we can add animation logic here in the future
+                batch.draw(entityTexture, e.getPosX(), e.getPosY(),
+                        (e.getEntityBoundingBox().getMaxX() - e.getEntityBoundingBox().getMinX()),
+                        (e.getEntityBoundingBox().getMaxY() - e.getEntityBoundingBox().getMinY()));
+            }
+
+            // batch.draw(e.getEntityTexture().getTexture(), e.getPosX(), e.getPosY(),
+            //         (e.getEntityBoundingBox().getMaxX() - e.getEntityBoundingBox().getMinX()),
+            //         (e.getEntityBoundingBox().getMaxY() - e.getEntityBoundingBox().getMinY()));
 
         }
         renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));

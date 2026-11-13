@@ -40,6 +40,10 @@ public class Entity {
         // System.out.println("Entity ctor: " + getClass().getSimpleName() + " image=" + image + " region=" + entityTexture.toString());
     }
 
+    public boolean isStatic() {
+        return false; // default to false, override in subclasses
+    }
+
     public void tickEntity(float delta) {
 
     }
