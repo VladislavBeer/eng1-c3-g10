@@ -8,7 +8,7 @@ public class BusStopEntity extends StaticEntity {
 
 
     public BusStopEntity(float posX, float posY, BoundingBox entityBoundingBox, GoosePatrol instance) {
-        super(posX, posY, "static/bus_stop.png", true, entityBoundingBox, instance);
+        super(posX, posY, "static/bus_stop.png",  entityBoundingBox, instance);
     }
 
 }

@@ -7,8 +7,8 @@ import com.github.goose_patrol.util.BoundingBox;
 public class StaticEntity extends Entity {
 
 
-    public StaticEntity(float posX, float posY, String image, boolean active, BoundingBox entityBoundingBox, GoosePatrol instance) {
-        super(posX, posY, image, active, entityBoundingBox, instance);
+    public StaticEntity(float posX, float posY, String image, BoundingBox entityBoundingBox, GoosePatrol instance) {
+        super(posX, posY, image, entityBoundingBox, instance);
 
     }
 
@@ -17,5 +17,5 @@ public class StaticEntity extends Entity {
         return true;
     }
 }
-    
+
 

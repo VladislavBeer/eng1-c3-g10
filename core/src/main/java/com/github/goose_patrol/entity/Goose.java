@@ -22,7 +22,7 @@ public class Goose extends Entity {
     private final Array<Texture> textures = new Array<>(); // Keep track of loaded textures for disposal
 
     public Goose(float posX, float posY, String image, boolean active, boolean triggered, GoosePatrol instance) {
-        super(posX, posY, image, active, new BoundingBox(posX, posX + 50, posY, posY + 50), instance);
+        super(posX, posY, image, new BoundingBox(posX, posX + 50, posY, posY + 50), instance);
         this.triggered = triggered;
 
         // Load textures now to avoid doing it repeatedly later.
@@ -30,16 +30,6 @@ public class Goose extends Entity {
         this.setCurrentDirection(directionState.E); // default to east-facing
     }
 
-    public boolean trigger() {
-
-        // TODO
-        return false;
-
-    }
-
-    public void kill() {
-
-    }
 
     @Override
     public void tickEntity(float delta) {
@@ -47,7 +37,7 @@ public class Goose extends Entity {
         super.tickEntity(delta);
 
     }
-    
+
     // Load texture based on the current direction state of the goose
     @Override
     public TextureRegion getEntityTexture() {

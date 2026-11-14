@@ -15,7 +15,6 @@ public class Entity {
     protected float posY;
     private String image;
     private BoundingBox entityBoundingBox;
-    private boolean active;
     private final TextureRegion entityTexture;
     protected GoosePatrol instance;
 
@@ -27,13 +26,12 @@ public class Entity {
     private float stateTime; // Time spent in current state, for future animation purposes.
 
 
-    public Entity(float posX, float posY, String image, boolean active, BoundingBox entityBoundingBox, GoosePatrol instance) {
+    public Entity(float posX, float posY, String image, BoundingBox entityBoundingBox, GoosePatrol instance) {
 
         this.posX = posX;
         this.posY = posY;
         this.image = image;
         this.instance = instance;
-        this.active = active;
         this.entityBoundingBox = entityBoundingBox;
         this.entityTexture = new TextureRegion(new Texture(Gdx.files.internal(image)));
         // debug
@@ -54,20 +52,15 @@ public class Entity {
     public float getPosY() {
         return posY;
     }
-    public String getImage() {
-        return image;
-    }
     public BoundingBox getEntityBoundingBox() {
         return entityBoundingBox;
     }
-    public boolean isActive() {
-        return active;
-    }
+
 
     public TextureRegion getEntityTexture() {
         return this.entityTexture;
     }
-    
+
 
     // additional getters and setters for tracking direction and state time, for animation purposes
     public directionState getCurrentDirection() {
@@ -77,6 +70,6 @@ public class Entity {
         this.currentDirection = newDirection;
     }
     public float getStateTime() {
-        return stateTime;   
+        return stateTime;
     }
 }

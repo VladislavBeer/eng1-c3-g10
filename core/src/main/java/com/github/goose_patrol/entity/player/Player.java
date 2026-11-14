@@ -37,7 +37,7 @@ public class Player extends Entity {
 
     public Player(float posX, float posY, InventoryItem[] initialInventory, String image, GoosePatrol instance) {
 
-        super(posX, posY, image, true, new BoundingBox(posX, posX + WIDTH, posY, posY + HEIGHT), instance);
+        super(posX, posY, image,  new BoundingBox(posX, posX + WIDTH, posY, posY + HEIGHT), instance);
         this.inventory = initialInventory;
         this.heldItemNumber = 0;
 

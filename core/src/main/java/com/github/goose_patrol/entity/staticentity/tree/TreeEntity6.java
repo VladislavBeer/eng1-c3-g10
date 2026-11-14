@@ -8,7 +8,7 @@ public class TreeEntity6 extends StaticEntity {
 
 
     public TreeEntity6(float posX, float posY, BoundingBox entityBoundingBox, GoosePatrol instance) {
-        super(posX, posY, "static/Tree6.png", true, entityBoundingBox, instance);
+        super(posX, posY, "static/Tree6.png",  entityBoundingBox, instance);
     }
 
 }

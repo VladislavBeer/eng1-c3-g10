@@ -8,7 +8,7 @@ public class BuildingEntity extends StaticEntity {
 
 
     public BuildingEntity(float posX, float posY, BoundingBox entityBoundingBox, GoosePatrol instance) {
-        super(posX, posY, "static/building.png", true, entityBoundingBox, instance);
+        super(posX, posY, "static/building.png",  entityBoundingBox, instance);
 
     }
 
