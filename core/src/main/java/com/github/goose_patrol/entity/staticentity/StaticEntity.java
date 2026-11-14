@@ -16,6 +16,11 @@ public class StaticEntity extends Entity {
     public boolean isStatic() {
         return true;
     }
+
+    @Override 
+    public boolean isMoving() {
+        return false;
+    }
 }
 
 

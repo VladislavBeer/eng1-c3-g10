@@ -14,7 +14,10 @@ import com.github.goose_patrol.render.RenderManager;
 import com.github.goose_patrol.util.InventoryItem;
 import com.github.goose_patrol.util.State;
 
-/** Entry point shared by all platforms. Starts the game on the {@link com.github.goose_patrol.render.RenderHandler}. */
+/**
+ * Entry point shared by all platforms. Starts the game on the
+ * {@link com.github.goose_patrol.render.RenderHandler}.
+ */
 public class GoosePatrol extends Game {
 
     private RenderManager renderManager;

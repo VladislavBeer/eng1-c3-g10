@@ -15,16 +15,18 @@ public class InventoryItem {
     public InventoryItem(String name, String imageItem, Optional<Event> useEvent) {
         this.name = name;
         this.imageItem = new Texture(imageItem);
-        this.useEvent = useEvent;
+      
+//     public InventoryItem(String name, String imageItem, Optional<Event> useEvent) {
+//         this.name = name;
+//         this.imageItem = imageItem;
+//         this.useEvent = useEvent;
     }
-
 
     public void useItem() {
 
         getUseEvent().get().fire();
 
     }
-
 
     public String getName() {
         return name;
@@ -34,16 +36,17 @@ public class InventoryItem {
     public Texture getImageItem() {
         return imageItem;
     }
-
+  
+//     public String getImageItem() {
+//         return imageItem;
+//     }
 
     public Optional<Event> getUseEvent() {
         return useEvent;
     }
 
-
     public void setUseEvent(Optional<Event> useEvent) {
         this.useEvent = useEvent;
     }
-
 
 }

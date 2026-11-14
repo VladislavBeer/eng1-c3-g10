@@ -15,6 +15,7 @@ public class HiddenEvent2 implements Event {
 
     private GoosePatrol instance;
     private boolean hasTriggeed = false;
+    private boolean hasUsed = false;
 
     public HiddenEvent2(GoosePatrol instance) {
         this.instance = instance;
