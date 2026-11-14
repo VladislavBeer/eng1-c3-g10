@@ -9,6 +9,13 @@ public class StaticEntity extends Entity {
 
     public StaticEntity(float posX, float posY, String image, boolean active, BoundingBox entityBoundingBox, GoosePatrol instance) {
         super(posX, posY, image, active, entityBoundingBox, instance);
+
     }
-    
+
+    @Override
+    public boolean isStatic() {
+        return true;
+    }
 }
+    
+

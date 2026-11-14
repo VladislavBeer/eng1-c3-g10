@@ -1,6 +1,10 @@
 package com.github.goose_patrol.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.util.BoundingBox;
 
@@ -12,7 +16,7 @@ public class Entity {
     private String image;
     private BoundingBox entityBoundingBox;
     private boolean active;
-    private final Texture entityTexture;
+    private final TextureRegion entityTexture;
     protected GoosePatrol instance;
 
     // enum used to track direction of movement, for animation purposes.
@@ -31,8 +35,13 @@ public class Entity {
         this.instance = instance;
         this.active = active;
         this.entityBoundingBox = entityBoundingBox;
-        this.entityTexture = new Texture(image);
+        this.entityTexture = new TextureRegion(new Texture(Gdx.files.internal(image)));
+        // debug
+        // System.out.println("Entity ctor: " + getClass().getSimpleName() + " image=" + image + " region=" + entityTexture.toString());
+    }
 
+    public boolean isStatic() {
+        return false; // default to false, override in subclasses
     }
 
     public void tickEntity(float delta) {
@@ -55,7 +64,7 @@ public class Entity {
         return active;
     }
 
-    public Texture getEntityTexture() {
+    public TextureRegion getEntityTexture() {
         return this.entityTexture;
     }
     
