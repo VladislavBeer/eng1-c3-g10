@@ -1,5 +1,7 @@
 package com.github.goose_patrol.render;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
@@ -64,6 +66,7 @@ public class RenderHandler extends ScreenAdapter {
     private final FitViewport viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
     private final ShapeRenderer shapes = new ShapeRenderer();
     private final SpriteBatch batch = new SpriteBatch();
+    private final ArrayList<Entity> tickTimeEntities;
 
     private int Event_Triggered_Count = 0;
 
@@ -83,6 +86,7 @@ public class RenderHandler extends ScreenAdapter {
         this.renderManager = manager;
         this.hiddenEvent1 = new HiddenEvent1(manager.getInstance());
         this.hiddenEvent2 = new HiddenEvent2(manager.getInstance());
+        this.tickTimeEntities = new ArrayList<>();
 //        this.buildingTexture = new Texture("static/building.png");
 //        this.busStopTexture = new Texture("static/bus_stop.png");
 //        this.tree1Texture = new Texture("static/Tree1.png");
@@ -162,11 +166,17 @@ public class RenderHandler extends ScreenAdapter {
 
         this.renderManager.getInstance().getEntityManager().tickEntities(delta);
 
+        // Adding entities created during tick time
+        for (Entity e : tickTimeEntities) {
+            this.renderManager.getInstance().getEntityManager().addEntity(e);
+        }
+        tickTimeEntities.clear();
+
         if ((this.player.getPosX() >= 924f)&&(this.player.getPosX() <= 1264f)&&(this.player.getPosY() >= 0f)&&(this.player.getPosY() <= 425f)&&(!this.hiddenEvent1.hasTriggered())) {
-            this.hiddenEvent1.fire();
+            this.hiddenEvent1.activate();
             Event_Triggered_Count++;
         } else if ((this.player.getPosX() >= 1225f)&&(this.player.getPosX() <= 1550f)&&(this.player.getPosY() >= 769f)&&(this.player.getPosY() <= 1044f)&&(!this.hiddenEvent2.hasTriggered())) {
-            this.hiddenEvent2.fire();
+            this.hiddenEvent2.activate();
             Event_Triggered_Count++;
         }
 
@@ -355,11 +365,11 @@ public class RenderHandler extends ScreenAdapter {
         else
             font.draw(batch, minutes + ":" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
 
-        // Evnents counter
+        // Events counter
         font.draw(batch, "Events Triggered: " + Event_Triggered_Count, camera.position.x - (camera.viewportWidth / 2) + 10, camera.position.y + (camera.viewportHeight / 2) - 15);
 
-        // cords
-        font.draw(batch, "Cords: " + Math.round(player.getPosX()) + ", " + Math.round(player.getPosY()), camera.position.x - (camera.viewportWidth / 2) + 10, camera.position.y + (camera.viewportHeight / 2) - 45);
+        // Items used counter
+        font.draw(batch, "Items Used: " + player.Get_Number_Of_Items_Used(), camera.position.x - (camera.viewportWidth / 2) + 10, camera.position.y + (camera.viewportHeight / 2) - 35);
 
         //Inventory
         if (player.getInventory() != null)
@@ -391,5 +401,9 @@ public class RenderHandler extends ScreenAdapter {
         shapes.dispose();
         batch.dispose();
         player.disposeTextures();
+    }
+
+    public void addTickTimeEntity(Entity entity) {
+        tickTimeEntities.add(entity);
     }
 }

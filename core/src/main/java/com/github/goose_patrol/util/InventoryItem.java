@@ -12,10 +12,10 @@ public class InventoryItem {
 
 
 
-    public InventoryItem(String name, String imageItem) {
+    public InventoryItem(String name, String imageItem, Optional<Event> useEvent) {
         this.name = name;
         this.imageItem = new Texture(imageItem);
-        this.useEvent = Optional.empty();
+        this.useEvent = useEvent;
     }
 
 

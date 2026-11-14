@@ -80,4 +80,6 @@ public class Entity {
     public void Set_Y(float newY) {
         this.posY = newY;
     }
+
+    public void Set_To_Follow(Entity entity) {}
 }
