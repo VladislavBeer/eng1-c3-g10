@@ -29,4 +29,8 @@ public class HiddenEvent1 implements Event {
 
     }
 
+    public boolean hasTriggered() {
+        return hasTriggeed;
+    }
+
 }
