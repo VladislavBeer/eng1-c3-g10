@@ -47,7 +47,7 @@ public class HiddenEvent1 implements Event {
         Random randNum = new Random();
         for (int i = 0; i < 5; i++) {
             Goose goose = new Goose(randNum.nextFloat(850f, 950f),
-                    randNum.nextFloat(450f, 550f), "goose/goosee.png", true, true, this.instance);
+                    randNum.nextFloat(450f, 550f), "goose/single texture/goosee.png", true, true, this.instance);
             goose.Set_To_Follow(instance.getEntityManager().Get_Player());
             this.instance.getEntityManager().addEntity(goose);
         }
