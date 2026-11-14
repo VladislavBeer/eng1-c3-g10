@@ -19,7 +19,7 @@ public class HiddenEvent1 implements Event {
 
     public void fire() {
         this.instance.getRenderManager().getRenderHandler().addTickTimeEntity(
-                new Entity(400f, 450f, "Items/bread.png", true, new BoundingBox(400f, 425f, 450f, 475f),
+                new Entity(400f, 450f, "Items/bread.png", new BoundingBox(400f, 425f, 450f, 475f),
                         instance));
     }
 
