@@ -30,6 +30,7 @@ public class Player extends Entity {
     EnumMap<directionState, TextureRegion> directionIdleTextures = new EnumMap<>(directionState.class);
     /** Map of walking animation sheets to their corresponding direction states */
     EnumMap<directionState, Animation<TextureRegion>> walkingAnimations = new EnumMap<>(directionState.class);
+    private float stateTime = 0f; // Time spent in current state, for future animation purposes.
     private final Array<Texture> textures = new Array<>(); // Keep track of loaded textures for disposal
 
     private InventoryItem[] inventory;
@@ -58,6 +59,10 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) dirX += 1;
         if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) dirY -= 1;
         if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) dirY += 1;
+
+        // check if the player was moving before this tick, to determine if we need to reset the state time (animation)
+        boolean wasMoving = this.isMoving;
+        float oldPosX = posX, oldPosY = posY; // Store old position 
         moveEntity(dirX, dirY, delta, this.instance.getRenderManager().getMaxX(), this.instance.getRenderManager().getMaxY());
 
         // Check for inventory slot key presses (1-4)
@@ -70,8 +75,27 @@ public class Player extends Entity {
             inventory[heldItemNumber].useItem(); //use the corresponding item if available
             inventory[heldItemNumber] = null; // Remove the item from the inventory after use
         }
-        super.tickEntity(delta);
 
+
+        // we need to update the current direction state based on movement
+        // 1 Check if the player is moving in any direction, by change from old position to new position
+        this.isMoving = posX != oldPosX || posY != oldPosY;
+
+        // 2 Update the player's state based on movement direction
+        if (dirX != 0 || dirY != 0) {
+            // determine the direction based on deltaX and deltaY
+            this.setCurrentDirection(getDirectionState(dirX, dirY));
+        }
+        //else doesnt matter, no change from last direction if not moving,
+
+        // 3 Update the state time for animation purposes, flip if player stopped moving
+        if (isMoving != wasMoving) {
+            stateTime = 0f; // reset state time if movement state changed
+        } else {
+            stateTime += delta; // increment state time if still moving
+        }
+
+        super.tickEntity(delta);
     }
 
     public void moveEntity(float deltaX, float deltaY, float delta, float mapWidth, float mapHeight) {
@@ -129,25 +153,17 @@ public class Player extends Entity {
         this.getEntityBoundingBox().setMinY(this.posY);
         this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
 
-        // Update the current direction state based on movement
-        // Check if the player is moving in any direction
-        boolean isMoving = Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0;
-
-        // Update the player's state based on movement direction
-        if (isMoving) {
-            // player is moving, determine the direction based on deltaX and deltaY
-            this.setCurrentDirection(getDirectionState(deltaX, deltaY));
-        } else {
-            this.setCurrentDirection(directionState.S); // player is idle, set to south-facing direction
-        }
-
     }
 
-    // Load texture based on the current direction state of the player
+    // Load texture or animation based on the current direction state and movement status of the player
     @Override
     public TextureRegion getEntityTexture() {
-        // Return the texture corresponding to the current direction state
-        return directionIdleTextures.get(getCurrentDirection());
+        directionState dir = getCurrentDirection();
+        if (isMoving) {
+            Animation<TextureRegion> anim = walkingAnimations.get(dir);
+            if (anim != null) return anim.getKeyFrame(stateTime, true);
+        }
+        return directionIdleTextures.get(dir);
     }
 
     private void loadTextures() {
@@ -232,6 +248,13 @@ public class Player extends Entity {
 
     public InventoryItem[] getInventory() {
         return inventory;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
     }
 
 }
