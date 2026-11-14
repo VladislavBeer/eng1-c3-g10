@@ -219,7 +219,7 @@ public class Player extends Entity {
             sheet.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
             textures.add(sheet); // keep a list so you can dispose them later
             // textures must be disposed of when the game ends to free up memory, this is a
-            // temporary solution until implement an AssetManager implementation.
+            // temporary solution until AssetManager implementation.
 
             // Frame 0 = idle
             directionIdleTextures.put(d, new TextureRegion(sheet, 0, 0, frameW, frameH));

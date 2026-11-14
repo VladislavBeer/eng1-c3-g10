@@ -34,6 +34,8 @@ public class Goose extends Entity {
     /** Map of walking animation sheets to their corresponding direction states */
     EnumMap<directionState, Animation<TextureRegion>> walkingAnimations = new EnumMap<>(directionState.class);
     private final Array<Texture> textures = new Array<>(); // Keep track of loaded textures for disposal
+    private float stateTime = 0f; // Time spent in current state, for future animation purposes.
+
     private Entity Entity_To_Follow;
     private int targetNode = -1;
 
@@ -46,11 +48,17 @@ public class Goose extends Entity {
         this.setCurrentDirection(directionState.E); // default to east-facing
     }
 
-    // Load texture based on the current direction state of the goose
+    // Load texture or animation frame based on the current direction state and
+    // movement of the goose
     @Override
     public TextureRegion getEntityTexture() {
-        // Return the texture corresponding to the current direction state
-        return directionIdleTextures.get(getCurrentDirection());
+        directionState dir = getCurrentDirection();
+        if (isMoving) {
+            Animation<TextureRegion> anim = walkingAnimations.get(dir);
+            if (anim != null)
+                return anim.getKeyFrame(stateTime, true);
+        }
+        return directionIdleTextures.get(dir);
     }
 
     // Helper method to load the textures, ported from Player.java but modified for
@@ -68,7 +76,7 @@ public class Goose extends Entity {
             sheet.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
             textures.add(sheet); // keep a list so you can dispose them later
             // textures must be disposed of when the game ends to free up memory, this is a
-            // temporary solution until implement an AssetManager implementation.
+            // temporary solution until AssetManager implementation.
 
             // Frame 0 = idle
             directionIdleTextures.put(d, new TextureRegion(sheet, 0, 0, frameW, frameH));
@@ -79,7 +87,8 @@ public class Goose extends Entity {
                 frames.add(new TextureRegion(sheet, i * frameW, 0, frameW, frameH));
             }
 
-            walkingAnimations.put(d, new Animation<>(0.1f, frames, Animation.PlayMode.LOOP));
+            // geese travel faster than the player, so we can speed up the animation a bit
+            walkingAnimations.put(d, new Animation<>(0.05f, frames, Animation.PlayMode.LOOP));
         }
 
     }
@@ -211,8 +220,31 @@ public class Goose extends Entity {
             }
         }
 
+        // Check if the goose is moving and update the direction state and apply
+        // animation accordingly
+        float oldPosX = this.posX, oldPosY = this.posY; // store old position
+        Boolean wasMoving = this.isMoving;
         // 3. APPLY MOVEMENT
         moveEntity(dirX, dirY, delta, instance.getRenderManager().getMaxX(), instance.getRenderManager().getMaxY());
+
+        // A. Check if the Goose is moving in any direction, by change from old position
+        // to new position
+        this.isMoving = posX != oldPosX || posY != oldPosY;
+
+        // B. Update the Goose's state based on movement direction
+        if (dirX != 0 || dirY != 0) {
+            // determine the direction based on deltaX and deltaY
+            this.setCurrentDirection(getDirectionState(dirX, dirY));
+        }
+        // else doesnt matter, no change from last direction if not moving,
+
+        // C. Update the state time for animation purposes, flip if player stopped
+        // moving
+        if (isMoving != wasMoving) {
+            stateTime = 0f; // reset state time if movement state changed
+        } else {
+            stateTime += delta; // increment state time if still moving
+        }
 
         super.tickEntity(delta);
     }
@@ -321,10 +353,6 @@ public class Goose extends Entity {
         this.getEntityBoundingBox().setMaxX(this.posX + WIDTH);
         this.getEntityBoundingBox().setMinY(this.posY);
         this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
-
-        // Update the current direction state based on movement
-        // Check if the player is moving in any direction
-        boolean isMoving = Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0;
 
     }
 

@@ -48,7 +48,7 @@ public class GoosePatrol extends Game {
         Player player = new Player(195, 224, new InventoryItem[] {
                 new InventoryItem("Bread", "Items/bread.png", Optional.of(new HiddenEvent1(this))),
                 new InventoryItem("Phone", "Items/music_phone.png", Optional.of(new HiddenEvent2(this))), null, null },
-                "player/playere.png", this);
+                "player/single texture/playere.png", this);
         this.playerManager = new PlayerManager(player);
         this.entityManager = new EntityManager(this);
         this.entityManager.addEntity(player);
