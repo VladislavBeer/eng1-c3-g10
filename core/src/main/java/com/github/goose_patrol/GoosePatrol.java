@@ -44,13 +44,11 @@ public class GoosePatrol extends Game {
 
         final float mapWidth = 1600f;
         final float mapHeight = 1200f;
-        Player player = new Player(20, 150, new InventoryItem[] {
-                new InventoryItem("Bread", "Items/bread.png", Optional.of(new HiddenEvent1(this))),
-                new InventoryItem("Phone", "Items/music_phone.png", Optional.of(new HiddenEvent2(this))), null, null },
-                "player/playere.png", this);
+        Player player = new Player(195, 224, new InventoryItem[]{new InventoryItem("Bread","Items/bread.png", Optional.of(new HiddenEvent1(this))),new InventoryItem("Phone","Items/music_phone.png", Optional.of(new HiddenEvent2(this))),null,null}, "player/playere.png", this);
         this.playerManager = new PlayerManager(player);
         this.entityManager = new EntityManager(this);
         this.entityManager.addEntity(player);
+        this.entityManager.Set_Player(player);
         this.renderManager = new RenderManager(this, 1600f, 1200f, player);
         this.STATE = State.PRE;
         setScreen(renderManager.getRenderHandler());

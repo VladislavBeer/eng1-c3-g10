@@ -6,10 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import java.util.List;
 
 import com.github.goose_patrol.GoosePatrol;
+import com.github.goose_patrol.entity.player.Player;
+import com.github.goose_patrol.util.Area;
 import com.github.goose_patrol.util.BoundingBox;
+import com.github.goose_patrol.util.MapHelper;
 
 public class Goose extends Entity {
 
@@ -20,6 +26,8 @@ public class Goose extends Entity {
     /** Map of walking animation sheets to their corresponding direction states */
     EnumMap<directionState, Animation<TextureRegion>> walkingAnimations = new EnumMap<>(directionState.class);
     private final Array<Texture> textures = new Array<>(); // Keep track of loaded textures for disposal
+    private Entity Entity_To_Follow;
+    private int targetNode = -1;
 
     public Goose(float posX, float posY, String image, boolean active, boolean triggered, GoosePatrol instance) {
         super(posX, posY, image, new BoundingBox(posX, posX + 50, posY, posY + 50), instance);
@@ -28,14 +36,6 @@ public class Goose extends Entity {
         // Load textures now to avoid doing it repeatedly later.
         loadTextures();
         this.setCurrentDirection(directionState.E); // default to east-facing
-    }
-
-
-    @Override
-    public void tickEntity(float delta) {
-
-        super.tickEntity(delta);
-
     }
 
     // Load texture based on the current direction state of the goose
@@ -105,5 +105,205 @@ public class Goose extends Entity {
             texture.dispose();
         }
         textures.clear();
+    }
+
+    @Override
+    public void tickEntity(float delta) {
+
+        float PLAYER_FOLLOW_DISTANCE = instance.getEntityManager().Get_Player_Follow_Distance();
+        float NODE_REACH_DISTANCE = instance.getEntityManager().Get_Node_Reach_Distance();
+        Vector2[] Graph_Nodes = instance.getEntityManager().Get_Graph_Nodes();
+        Vector2[] Graph_Connections = instance.getEntityManager().Get_Graph_Connections();
+
+        Vector2 Goose_Position = new Vector2(this.posX, this.posY);
+
+        float dirX = 0;
+        float dirY = 0;
+
+        // Entity Pathfinding and Following Logic
+        if (Entity_To_Follow != null) 
+        {  // If goose has an entity to follow 
+            Vector2 targetPosition = new Vector2(Entity_To_Follow.getPosX(),Entity_To_Follow.getPosY());
+
+            float targetDistance = Goose_Position.dst(targetPosition);
+
+            if (targetDistance <= PLAYER_FOLLOW_DISTANCE) 
+            {  // 1. DIRECT ENTITY FOLLOWING
+                Vector2 direction = new Vector2(targetPosition).sub(Goose_Position);
+
+                if (direction.len2() > 0.001f)
+                {
+                    direction.nor();
+
+                    dirX = direction.x;
+                    dirY = direction.y;
+                }
+            }
+            else  // 2. GRAPH NAVIGATION
+            {
+                int currentNode = 0;
+                if (targetNode == -1)
+                {
+                    float closestDistance = Float.MAX_VALUE;
+
+                    for (int i = 0; i < Graph_Nodes.length; i++)
+                    {
+                        float distance = Goose_Position.dst(Graph_Nodes[i]);
+
+                        if (distance < closestDistance) 
+                        {
+                            closestDistance = distance;
+                            currentNode = i;
+                        }
+                    }
+                    targetNode = currentNode;
+                }
+                if (Goose_Position.dst(Graph_Nodes[targetNode]) <= NODE_REACH_DISTANCE) 
+                {
+                    currentNode = targetNode;
+                    targetNode = -1;
+
+                    float bestDistance = Float.MAX_VALUE;
+
+                    for (Vector2 connection : Graph_Connections) 
+                    {
+                        int nodeA = (int) connection.x;
+                        int nodeB = (int) connection.y;
+
+                        int candidateNode = -1;
+
+                        if (nodeA == currentNode) candidateNode = nodeB;
+
+                        else if (nodeB == currentNode) candidateNode = nodeA;
+
+                        if (candidateNode == -1) continue;
+
+                        float distance = targetPosition.dst(Graph_Nodes[candidateNode]);
+
+                        if (distance < bestDistance) 
+                        {
+                            bestDistance = distance;
+                            targetNode = candidateNode;
+                        }
+                    }
+                }
+                if (targetNode != -1) 
+                {
+                    Vector2 direction = new Vector2(Graph_Nodes[targetNode]).sub(Goose_Position);
+
+                    if (direction.len2() > 0.001f) 
+                    {
+                        direction.nor();
+
+                        dirX = direction.x;
+                        dirY = direction.y;
+                    }
+                }
+            }
+        }
+
+        // 3. APPLY MOVEMENT
+        moveEntity(dirX,dirY,delta,instance.getRenderManager().getMaxX(),instance.getRenderManager().getMaxY());
+
+        super.tickEntity(delta);
+    }
+
+    public void moveEntity(float deltaX, float deltaY, float delta, float mapWidth, float mapHeight) {
+
+        float WIDTH = this.getEntityBoundingBox().getMaxX() - this.getEntityBoundingBox().getMinX();
+        float HEIGHT = this.getEntityBoundingBox().getMaxY() - this.getEntityBoundingBox().getMinY();
+        float SPEED = 100f;
+
+        Vector2 direction = new Vector2(deltaX, deltaY);
+        if (!direction.isZero()) 
+        {
+            direction.nor(); // stops diagonal movement being faster
+        }
+        Vector2 position = new Vector2();
+        position.x = posX;
+        position.y = posY;
+        Area currentArea = MapHelper.getCurrentArea(position.x, position.y);
+        if (currentArea == Area.GRASS) SPEED = 100f;
+        else SPEED = 200f;
+        position.mulAdd(direction, SPEED * delta);
+        position.x = MathUtils.clamp(position.x, 0, mapWidth - WIDTH);
+        position.y = MathUtils.clamp(position.y, 0, mapHeight - HEIGHT);
+
+        // Handles entity collisions
+        
+        BoundingBox newBoundingBox = getEntityBoundingBox().clone();
+
+        newBoundingBox.setMinX(newBoundingBox.getMinX() + deltaX);
+        newBoundingBox.setMinY(newBoundingBox.getMinY() + deltaY);
+        newBoundingBox.setMaxX(newBoundingBox.getMaxX() + deltaX);
+        newBoundingBox.setMaxY(newBoundingBox.getMaxY() + deltaY);        
+        
+        List<Entity> entities = instance.getEntityManager().getEntities();
+
+        int thisIndex = entities.indexOf(this);
+
+        for (int i = 0; i < entities.size(); i++) 
+        {
+            Entity entity = entities.get(i);
+
+            if (entity == this) continue;
+
+            boolean otherIsFollowTarget = Entity_To_Follow != null && entity == Entity_To_Follow;
+
+            boolean otherIsGoose = entity instanceof Goose;
+
+            if (!otherIsFollowTarget && !otherIsGoose) continue;
+
+            // Higher-index goose has priority. It does not need to resolve collisions with lower-index geese.
+            if (otherIsGoose && thisIndex > i) continue;
+
+            BoundingBox otherBox = entity.getEntityBoundingBox();
+
+            // Check for collision
+            if (newBoundingBox.getMinX() < otherBox.getMaxX() && newBoundingBox.getMaxX() > otherBox.getMinX() && newBoundingBox.getMinY() < otherBox.getMaxY() && newBoundingBox.getMaxY() > otherBox.getMinY()) 
+            {
+                float overlapX = Math.min(newBoundingBox.getMaxX() - otherBox.getMinX(),otherBox.getMaxX() - newBoundingBox.getMinX());
+
+                float overlapY = Math.min(newBoundingBox.getMaxY() - otherBox.getMinY(),otherBox.getMaxY() - newBoundingBox.getMinY());
+
+                // Push away along the axis with the smallest overlap.
+                if (overlapX < overlapY)
+                {
+                    if (position.x < entity.getPosX()) position.x -= overlapX;
+                    else position.x += overlapX;
+
+                } 
+                else 
+                {
+                    if (position.y < entity.getPosY()) position.y -= overlapY;
+                    else position.y += overlapY;
+                }
+
+                // Refresh bounding box after separation.
+                newBoundingBox = getEntityBoundingBox().clone();
+
+                newBoundingBox.setMinX(newBoundingBox.getMinX() + (position.x - posX));
+                newBoundingBox.setMinY(newBoundingBox.getMinY() + (position.y - posY));
+                newBoundingBox.setMaxX(newBoundingBox.getMaxX() + (position.x - posX));
+                newBoundingBox.setMaxY(newBoundingBox.getMaxY() + (position.y - posY));
+            }
+        }
+
+        this.posX = position.x;
+        this.posY = position.y;
+
+        this.getEntityBoundingBox().setMinX(this.posX);
+        this.getEntityBoundingBox().setMaxX(this.posX + WIDTH);
+        this.getEntityBoundingBox().setMinY(this.posY);
+        this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
+
+        // Update the current direction state based on movement
+        // Check if the player is moving in any direction
+        boolean isMoving = Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0;
+
+    }
+
+    public void Set_To_Follow(Entity entity) {
+        this.Entity_To_Follow = entity;
     }
 }

@@ -49,6 +49,8 @@ public class RenderHandler extends ScreenAdapter {
     private final Texture pauseMenuTexture;
     private final Texture loseMenuTexture;
     private final Texture mapTexture;
+    private final Texture Inventory_Slot;
+    private final Texture Inventory_Slot_Selected;
     private final Player player;
     private final RenderManager renderManager;
     private final HiddenEvent1 hiddenEvent1;
@@ -66,6 +68,8 @@ public class RenderHandler extends ScreenAdapter {
     private final SpriteBatch batch = new SpriteBatch();
     private final ArrayList<Entity> tickTimeEntities;
 
+    private int Event_Triggered_Count = 0;
+
     public RenderHandler(Player player, RenderManager manager) {
         this.player = player;
         batch.setProjectionMatrix(camera.combined);
@@ -77,6 +81,8 @@ public class RenderHandler extends ScreenAdapter {
         this.pauseMenuTexture = new Texture("splash/pause.png");
         this.loseMenuTexture = new Texture("splash/lose.png");
         this.winTexture = new Texture("splash/win.png");
+        this.Inventory_Slot = new Texture("Inventory/slot_normal.png");
+        this.Inventory_Slot_Selected = new Texture("Inventory/slot_selected.png");
         this.renderManager = manager;
         this.hiddenEvent1 = new HiddenEvent1(manager.getInstance());
         this.hiddenEvent2 = new HiddenEvent2(manager.getInstance());
@@ -157,10 +163,12 @@ public class RenderHandler extends ScreenAdapter {
         }
         tickTimeEntities.clear();
 
-        if (this.player.getPosX() >= 1200f) {
+        if ((this.player.getPosX() >= 924f)&&(this.player.getPosX() <= 1264f)&&(this.player.getPosY() >= 0f)&&(this.player.getPosY() <= 425f)&&(!this.hiddenEvent1.hasTriggered())) {
             this.hiddenEvent1.activate();
-        } else if (this.player.getPosY() >= 900f) {
+            Event_Triggered_Count++;
+        } else if ((this.player.getPosX() >= 1225f)&&(this.player.getPosX() <= 1550f)&&(this.player.getPosY() >= 769f)&&(this.player.getPosY() <= 1044f)&&(!this.hiddenEvent2.hasTriggered())) {
             this.hiddenEvent2.activate();
+            Event_Triggered_Count++;
         }
 
         // Keep the player centred but if they try walk past the edge, reset their
@@ -328,6 +336,7 @@ public class RenderHandler extends ScreenAdapter {
         }
         renderManager.getButtons().forEach(b -> b.draw(batch, renderManager.getInstance().STATE));
 
+        // Timer
         int seconds = (int) Math.floor(ticksRemaining / 20f);
         int minutes = (int) Math.floor(seconds / 60f);
         int secondsAfterMinutes = seconds - (minutes * 60);
@@ -336,24 +345,31 @@ public class RenderHandler extends ScreenAdapter {
             font.draw(batch, minutes + ":0" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
         else
             font.draw(batch, minutes + ":" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
-        //Inventory
-        //batch.draw(new Texture("inventory_Frame.png"),camera.position.x-(100),camera.position.y-(camera.viewportHeight/2)+10,200,50); // Drawwing the inventory frame
 
+        // Events counter
+        font.draw(batch, "Events Triggered: " + Event_Triggered_Count, camera.position.x - (camera.viewportWidth / 2) + 10, camera.position.y + (camera.viewportHeight / 2) - 15);
+
+        // Items used counter
+        font.draw(batch, "Items Used: " + player.Get_Number_Of_Items_Used(), camera.position.x - (camera.viewportWidth / 2) + 10, camera.position.y + (camera.viewportHeight / 2) - 35);
+
+        //Inventory
         if (player.getInventory() != null)
         {
             for(int i =0;i<player.getInventory().length;i++){ // Drawing the items in the inventory
                 if (player.getHeldItem() == i)
                 {
-                    batch.draw(new Texture("Inventory/slot_selected.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                    batch.draw(Inventory_Slot_Selected,camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
                 }
                 else
                 {
-                    batch.draw(new Texture("Inventory/slot_normal.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                    batch.draw(Inventory_Slot,camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
                 }
-                if (player.getInventory()[i] != null) {
-                    batch.draw(new Texture(player.getInventory()[i].getImageItem()),
-                            camera.position.x - (100) + 10 + (i * 30),
-                            camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
+                if(player.getInventory()[i] != null){
+                    batch.draw(player.getInventory()[i].getImageItem(),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                //if (player.getInventory()[i] != null) {
+                    //batch.draw(new Texture(player.getInventory()[i].getImageItem()),
+                            //camera.position.x - (100) + 10 + (i * 30),
+                            //camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
                 }
             }
         }

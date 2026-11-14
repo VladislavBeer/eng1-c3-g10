@@ -35,6 +35,7 @@ public class Player extends Entity {
 
     private InventoryItem[] inventory;
     private int heldItemNumber;
+    private int Number_Of_Items_Used = 0;
 
     public Player(float posX, float posY, InventoryItem[] initialInventory, String image, GoosePatrol instance) {
 
@@ -74,6 +75,7 @@ public class Player extends Entity {
         {
             inventory[heldItemNumber].useItem(); //use the corresponding item if available
             inventory[heldItemNumber] = null; // Remove the item from the inventory after use
+            Number_Of_Items_Used++; // Increment the number of items used
         }
 
 
@@ -250,6 +252,9 @@ public class Player extends Entity {
         return inventory;
     }
 
+    public int Get_Number_Of_Items_Used() {
+        return Number_Of_Items_Used;
+      
     public float getStateTime() {
         return stateTime;
     }

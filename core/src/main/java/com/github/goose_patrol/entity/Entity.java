@@ -77,4 +77,14 @@ public class Entity {
     public float getStateTime() {
         return stateTime;
     }
+
+    public void Set_X(float newX) {
+        this.posX = newX;
+    }
+    
+    public void Set_Y(float newY) {
+        this.posY = newY;
+    }
+
+    public void Set_To_Follow(Entity entity) {}
 }
