@@ -25,7 +25,16 @@ import com.github.goose_patrol.event.HiddenEvent1;
 import com.github.goose_patrol.event.HiddenEvent2;
 import com.github.goose_patrol.util.State;
 
-// Main gameplay screen: reads input, updates the player and draws the map and player.
+/**
+ * Main gameplay screen: reads input, updates the player and draws the map and
+ * player
+ * <p>
+ * Defines all ui elements and entities and textures to be placed on the screen
+ * <p>
+ * Main game loop will tick all entities in entity manager and updates positions
+ * and states, before rendering and drawing them all to the screen
+ * <p>
+ */
 public class RenderHandler extends ScreenAdapter {
     private static final float VIEW_WIDTH = 640f;
     private static final float VIEW_HEIGHT = 480f;
@@ -55,13 +64,13 @@ public class RenderHandler extends ScreenAdapter {
     private final RenderManager renderManager;
     private final HiddenEvent1 hiddenEvent1;
     private final HiddenEvent2 hiddenEvent2;
-//    private final Texture busStopTexture;
-//    private final Texture tree1Texture;
-//    private final Texture tree2Texture;
-//    private final Texture tree3Texture;
-//    private final Texture tree4Texture;
-//    private final Texture tree5Texture;
-//    private final Texture tree6Texture;
+    // private final Texture busStopTexture;
+    // private final Texture tree1Texture;
+    // private final Texture tree2Texture;
+    // private final Texture tree3Texture;
+    // private final Texture tree4Texture;
+    // private final Texture tree5Texture;
+    // private final Texture tree6Texture;
     final OrthographicCamera camera = new OrthographicCamera();
     private final FitViewport viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
     private final ShapeRenderer shapes = new ShapeRenderer();
@@ -145,7 +154,7 @@ public class RenderHandler extends ScreenAdapter {
 
     }
 
-    // On press of WASD / arrow keys, moves the player
+    /** On press of WASD / arrow keys, moves the player */
     private void update(float delta) {
 
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
@@ -163,10 +172,13 @@ public class RenderHandler extends ScreenAdapter {
         }
         tickTimeEntities.clear();
 
-        if ((this.player.getPosX() >= 924f)&&(this.player.getPosX() <= 1264f)&&(this.player.getPosY() >= 0f)&&(this.player.getPosY() <= 425f)&&(!this.hiddenEvent1.hasTriggered())) {
+        if ((this.player.getPosX() >= 924f) && (this.player.getPosX() <= 1264f) && (this.player.getPosY() >= 0f)
+                && (this.player.getPosY() <= 425f) && (!this.hiddenEvent1.hasTriggered())) {
             this.hiddenEvent1.activate();
             Event_Triggered_Count++;
-        } else if ((this.player.getPosX() >= 1225f)&&(this.player.getPosX() <= 1550f)&&(this.player.getPosY() >= 769f)&&(this.player.getPosY() <= 1044f)&&(!this.hiddenEvent2.hasTriggered())) {
+        } else if ((this.player.getPosX() >= 1225f) && (this.player.getPosX() <= 1550f)
+                && (this.player.getPosY() >= 769f) && (this.player.getPosY() <= 1044f)
+                && (!this.hiddenEvent2.hasTriggered())) {
             this.hiddenEvent2.activate();
             Event_Triggered_Count++;
         }
@@ -197,7 +209,7 @@ public class RenderHandler extends ScreenAdapter {
     private void renderWinMenu() {
 
         batch.draw(winTexture, camera.position.x - (camera.viewportWidth / 4),
-            camera.position.y - (camera.viewportHeight / 4), camera.viewportWidth / 2, camera.viewportHeight / 2);
+                camera.position.y - (camera.viewportHeight / 4), camera.viewportWidth / 2, camera.viewportHeight / 2);
 
     }
 
@@ -208,8 +220,10 @@ public class RenderHandler extends ScreenAdapter {
 
     }
 
-    // Function to render the game screen, including the map, grid lines, and
-    // player.
+    /**
+     * Function to render the game screen, including the map, grid lines, and
+     * player.
+     */
     private void draw() {
 
         ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1f);
@@ -267,7 +281,8 @@ public class RenderHandler extends ScreenAdapter {
 
         }
 
-        // shapes.setProjectionMatrix(camera.combined); // turns world coords into screen positions
+        // shapes.setProjectionMatrix(camera.combined); // turns world coords into
+        // screen positions
         // shapes.begin(ShapeType.Filled);
         // Walkable area (placeholder)
         // shapes.setColor(0.2f, 0.6f, 0.2f, 1f);
@@ -289,45 +304,46 @@ public class RenderHandler extends ScreenAdapter {
         // Render all entities in entity manager
         // This will INCLUDE all dynamic and static entities ie trees
         // buildings
-        //      batch.draw(buildingTexture, 75, 225, 300, 150);
-        //      batch.draw(busStopTexture, 75, 1040, 200, 100);
+        // batch.draw(buildingTexture, 75, 225, 300, 150);
+        // batch.draw(busStopTexture, 75, 1040, 200, 100);
         // trees
-        //      batch.draw(tree1Texture,10, 230, 80, 150);
-        //      batch.draw(tree1Texture, 375, 230, 70, 160);
+        // batch.draw(tree1Texture,10, 230, 80, 150);
+        // batch.draw(tree1Texture, 375, 230, 70, 160);
 
         // batch.draw(tree1Texture, 1375, 100, 70, 160);
-        //        batch.draw(tree1Texture, 1450, 170, 70, 160);
-        //        batch.draw(tree1Texture, 1490, 50, 70, 160);
+        // batch.draw(tree1Texture, 1450, 170, 70, 160);
+        // batch.draw(tree1Texture, 1490, 50, 70, 160);
         // oak trees
-        //        batch.draw(tree2Texture, 1300, 1100, 90, 100);
+        // batch.draw(tree2Texture, 1300, 1100, 90, 100);
         // Trees around the lake edges
-        //        batch.draw(tree3Texture, 575, 330, 78, 90);
-        //        batch.draw(tree3Texture, 760, 370, 81, 100);
-        //        batch.draw(tree3Texture, 1000, 450, 82, 70);
-        //        batch.draw(tree3Texture, 1220, 650, 76, 80);
+        // batch.draw(tree3Texture, 575, 330, 78, 90);
+        // batch.draw(tree3Texture, 760, 370, 81, 100);
+        // batch.draw(tree3Texture, 1000, 450, 82, 70);
+        // batch.draw(tree3Texture, 1220, 650, 76, 80);
         // birch trees
-        //        batch.draw(tree4Texture, 1000, 800, 90, 150);
-        //        batch.draw(tree4Texture, 1090, 750, 100, 160);
-        //        batch.draw(tree4Texture, 1170, 820, 110, 110);
+        // batch.draw(tree4Texture, 1000, 800, 90, 150);
+        // batch.draw(tree4Texture, 1090, 750, 100, 160);
+        // batch.draw(tree4Texture, 1170, 820, 110, 110);
         // mangrove trees
-        //        batch.draw(tree5Texture, 1200, 290, 80, 75);
-        //        batch.draw(tree5Texture, 1000, 360, 80, 100);
-        //        batch.draw(tree5Texture, 1156, 420, 80, 75);
+        // batch.draw(tree5Texture, 1200, 290, 80, 75);
+        // batch.draw(tree5Texture, 1000, 360, 80, 100);
+        // batch.draw(tree5Texture, 1156, 420, 80, 75);
 
         // cherry blossom trees
-        //        batch.draw(tree6Texture, 190, 800, 120, 140);
-        //        batch.draw(tree6Texture, 325, 820, 110, 130);
-        //        batch.draw(tree6Texture, 430, 1080, 90, 110);
-        //        batch.draw(tree6Texture, 550, 1090, 90, 105);
-        //        batch.draw(tree6Texture, 700, 1070, 85, 100);
-        //        batch.draw(tree6Texture, 890, 1100, 80, 90);
+        // batch.draw(tree6Texture, 190, 800, 120, 140);
+        // batch.draw(tree6Texture, 325, 820, 110, 130);
+        // batch.draw(tree6Texture, 430, 1080, 90, 110);
+        // batch.draw(tree6Texture, 550, 1090, 90, 105);
+        // batch.draw(tree6Texture, 700, 1070, 85, 100);
+        // batch.draw(tree6Texture, 890, 1100, 80, 90);
 
         // render entities
         batch.setProjectionMatrix(camera.combined);
         for (Entity e : renderManager.getInstance().getEntityManager().getEntities()) {
 
             TextureRegion region = e.getEntityTexture();
-            if (region == null) continue; // Skip rendering if the texture is null
+            if (region == null)
+                continue; // Skip rendering if the texture is null
 
             batch.draw(region, e.getPosX(), e.getPosY(),
                     (e.getEntityBoundingBox().getMaxX() - e.getEntityBoundingBox().getMinX()),
@@ -342,34 +358,39 @@ public class RenderHandler extends ScreenAdapter {
         int secondsAfterMinutes = seconds - (minutes * 60);
 
         if (secondsAfterMinutes < 10)
-            font.draw(batch, minutes + ":0" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
+            font.draw(batch, minutes + ":0" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40,
+                    camera.position.y + (camera.viewportHeight / 2) - 15);
         else
-            font.draw(batch, minutes + ":" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40, camera.position.y + (camera.viewportHeight / 2) - 15);
+            font.draw(batch, minutes + ":" + secondsAfterMinutes, camera.position.x + (camera.viewportWidth / 2) - 40,
+                    camera.position.y + (camera.viewportHeight / 2) - 15);
 
         // Events counter
-        font.draw(batch, "Events Triggered: " + Event_Triggered_Count, camera.position.x - (camera.viewportWidth / 2) + 10, camera.position.y + (camera.viewportHeight / 2) - 15);
+        font.draw(batch, "Events Triggered: " + Event_Triggered_Count,
+                camera.position.x - (camera.viewportWidth / 2) + 10,
+                camera.position.y + (camera.viewportHeight / 2) - 15);
 
         // Items used counter
-        font.draw(batch, "Items Used: " + player.Get_Number_Of_Items_Used(), camera.position.x - (camera.viewportWidth / 2) + 10, camera.position.y + (camera.viewportHeight / 2) - 35);
+        font.draw(batch, "Items Used: " + player.Get_Number_Of_Items_Used(),
+                camera.position.x - (camera.viewportWidth / 2) + 10,
+                camera.position.y + (camera.viewportHeight / 2) - 35);
 
-        //Inventory
-        if (player.getInventory() != null)
-        {
-            for(int i =0;i<player.getInventory().length;i++){ // Drawing the items in the inventory
-                if (player.getHeldItem() == i)
-                {
-                    batch.draw(Inventory_Slot_Selected,camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+        // Inventory
+        if (player.getInventory() != null) {
+            for (int i = 0; i < player.getInventory().length; i++) { // Drawing the items in the inventory
+                if (player.getHeldItem() == i) {
+                    batch.draw(Inventory_Slot_Selected, camera.position.x - (100) + 10 + (i * 30),
+                            camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
+                } else {
+                    batch.draw(Inventory_Slot, camera.position.x - (100) + 10 + (i * 30),
+                            camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
                 }
-                else
-                {
-                    batch.draw(Inventory_Slot,camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
-                }
-                if(player.getInventory()[i] != null){
-                    batch.draw(player.getInventory()[i].getImageItem(),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
-                //if (player.getInventory()[i] != null) {
-                    //batch.draw(new Texture(player.getInventory()[i].getImageItem()),
-                            //camera.position.x - (100) + 10 + (i * 30),
-                            //camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
+                if (player.getInventory()[i] != null) {
+                    batch.draw(player.getInventory()[i].getImageItem(), camera.position.x - (100) + 10 + (i * 30),
+                            camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
+                    // if (player.getInventory()[i] != null) {
+                    // batch.draw(new Texture(player.getInventory()[i].getImageItem()),
+                    // camera.position.x - (100) + 10 + (i * 30),
+                    // camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
                 }
             }
         }

@@ -23,7 +23,8 @@ public class GoosePatrol extends Game {
     private RenderManager renderManager;
     private PlayerManager playerManager;
     private EntityManager entityManager;
-    // private AssetManager assetManager; for future use if we want to load assets asynchronously
+    // private AssetManager assetManager; for future use if we want to load assets
+    // asynchronously
     public State STATE;
 
     @Override
@@ -44,7 +45,10 @@ public class GoosePatrol extends Game {
 
         final float mapWidth = 1600f;
         final float mapHeight = 1200f;
-        Player player = new Player(195, 224, new InventoryItem[]{new InventoryItem("Bread","Items/bread.png", Optional.of(new HiddenEvent1(this))),new InventoryItem("Phone","Items/music_phone.png", Optional.of(new HiddenEvent2(this))),null,null}, "player/playere.png", this);
+        Player player = new Player(195, 224, new InventoryItem[] {
+                new InventoryItem("Bread", "Items/bread.png", Optional.of(new HiddenEvent1(this))),
+                new InventoryItem("Phone", "Items/music_phone.png", Optional.of(new HiddenEvent2(this))), null, null },
+                "player/playere.png", this);
         this.playerManager = new PlayerManager(player);
         this.entityManager = new EntityManager(this);
         this.entityManager.addEntity(player);

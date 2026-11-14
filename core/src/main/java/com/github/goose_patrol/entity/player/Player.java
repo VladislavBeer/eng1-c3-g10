@@ -15,6 +15,14 @@ import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.util.*;
 
+/**
+ * Class for the player entity
+ * <p>
+ * Defines it's size, speed, assets for animation and inventory
+ * <p>
+ * Ticks every frame in which movement, animation and use of inventory items are
+ * handled
+ */
 public class Player extends Entity {
 
     /**
@@ -49,9 +57,13 @@ public class Player extends Entity {
 
     }
 
-    // On press of WASD / arrow keys, moves the player; Pressing keys 1, 2, 3, or 4
-    // selects the corresponding item slot, the item event is triggered by pressing
-    // the ENTER key.
+    /**
+     * On press of WASD / arrow keys, moves the player; Pressing keys 1, 2, 3, or 4
+     * selects the corresponding item slot, the item event is triggered by pressing
+     * the ENTER key.
+     * 
+     * @param delta the time elapsed since the last frame
+     */
     @Override
     public void tickEntity(float delta) {
 
@@ -111,6 +123,15 @@ public class Player extends Entity {
         super.tickEntity(delta);
     }
 
+    /**
+     * Moves the player according to the current input and handles collisions
+     * 
+     * @param deltaX    the change in x position
+     * @param deltaY    the change in y position
+     * @param delta     the time elapsed since the last frame
+     * @param mapWidth  the width of the map
+     * @param mapHeight the height of the map
+     */
     public void moveEntity(float deltaX, float deltaY, float delta, float mapWidth, float mapHeight) {
 
         Vector2 direction = new Vector2(deltaX, deltaY);
@@ -168,8 +189,12 @@ public class Player extends Entity {
 
     }
 
-    // Load texture or animation based on the current direction state and movement
-    // status of the player
+    /**
+     * Load texture or animation based on the current direction state and movement
+     * status of the player
+     * 
+     * @return an animation if the player is momving, an dile texture otherwise
+     */
     @Override
     public TextureRegion getEntityTexture() {
         directionState dir = getCurrentDirection();
@@ -210,7 +235,7 @@ public class Player extends Entity {
 
     }
 
-    // Helper method to determine the direction state
+    /** Helper method to determine the direction state */
     private directionState getDirectionState(float deltaX, float deltaY) {
 
         // Determine the sign of deltaX and deltaY to find the direction

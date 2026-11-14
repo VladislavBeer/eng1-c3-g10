@@ -1,5 +1,11 @@
 package com.github.goose_patrol.util;
 
+/**
+ * Class for bounding boxes, used for detecting collision between entities
+ * <p>
+ * Have a min and max x and y coordinate, which outlines a square/rectangle for
+ * collision
+ */
 public class BoundingBox {
 
     private float minX;
@@ -17,12 +23,15 @@ public class BoundingBox {
     public float getMinX() {
         return minX;
     }
+
     public float getMaxX() {
         return maxX;
     }
+
     public float getMinY() {
         return minY;
     }
+
     public float getMaxY() {
         return maxY;
     }

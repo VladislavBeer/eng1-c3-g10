@@ -7,6 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.github.goose_patrol.render.RenderManager;
 import com.github.goose_patrol.util.State;
 
+/**
+ * Parent class for buttons
+ * <p>
+ * Defines basic attributes texture position, size and state scope
+ * <p>
+ * Establishes methods for subsequent subclasses to follow such as drawing and
+ * handling clicks and an empty class for behaviour on click, which is subbclass
+ * specific
+ */
 public class Button {
 
     private final String path;
@@ -29,7 +38,8 @@ public class Button {
 
     public void draw(Batch batch, State state) {
 
-        if (this.stateScope != state) return;
+        if (this.stateScope != state)
+            return;
 
         batch.draw(texture, x, y, width, height);
 
@@ -37,7 +47,8 @@ public class Button {
 
     public boolean handleClick(float mouseX, float mouseY, RenderManager renderManager) {
 
-        if (this.stateScope != renderManager.getInstance().STATE) return false;
+        if (this.stateScope != renderManager.getInstance().STATE)
+            return false;
         if (mouseX > (x + 20) && mouseX < (x + width - 20) && mouseY > (y + 10) && mouseY < (y + height - 5)) {
 
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Hand);
@@ -56,10 +67,6 @@ public class Button {
     // TO BE OVERRIDDEN IN CHILDREN CLASSES
     public void onClick(RenderManager manager) {
 
-
-
-
     }
-
 
 }

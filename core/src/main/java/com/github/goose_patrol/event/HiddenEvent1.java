@@ -10,6 +10,13 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
 
+/**
+ * The first hidden event, triggered on the bottom right corner of the map,
+ * which will spawn 5 geese and must be beaten using the bread item
+ * <p>
+ * Contains methods that add geese to the entity manager when activated and
+ * changes the geese's behaviour when the bread item is used
+ */
 public class HiddenEvent1 implements Event {
 
     private GoosePatrol instance;
@@ -19,28 +26,32 @@ public class HiddenEvent1 implements Event {
         this.instance = instance;
     }
 
+    /**
+     * Creates new bread entity in the lake and reassigns goose pathfinding target
+     * to bread
+     */
     public void fire() {
-        Entity Bread_Entity = new Entity(400f, 450f, "Items/bread.png", new BoundingBox(400f, 425f, 450f, 475f),instance);
+        Entity Bread_Entity = new Entity(400f, 450f, "Items/bread.png", new BoundingBox(400f, 425f, 450f, 475f),
+                instance);
         this.instance.getRenderManager().getRenderHandler().addTickTimeEntity(Bread_Entity);
-        
+
         List<Entity> entities = instance.getEntityManager().getEntities();
 
-        for (int i = 0; i < entities.size(); i++) 
-        {
+        for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
 
-            if (entity instanceof Goose)
-            {
+            if (entity instanceof Goose) {
                 Vector2 Goose_Position = new Vector2(entity.getPosX(), entity.getPosY());
-                Vector2 Player_Position = new Vector2(instance.getEntityManager().Get_Player().getPosX(), instance.getEntityManager().Get_Player().getPosY());
-                if (Goose_Position.dst(Player_Position) < 200f)
-                {
+                Vector2 Player_Position = new Vector2(instance.getEntityManager().Get_Player().getPosX(),
+                        instance.getEntityManager().Get_Player().getPosY());
+                if (Goose_Position.dst(Player_Position) < 200f) {
                     entity.Set_To_Follow(Bread_Entity);
                 }
             }
-        } 
+        }
     }
 
+    /** Spawns 5 geese within the lake and marks the evnt as triggered */
     public void activate() {
         if (hasTriggeed)
             return;

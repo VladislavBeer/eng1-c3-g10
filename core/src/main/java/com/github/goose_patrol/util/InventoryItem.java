@@ -4,6 +4,12 @@ import java.util.Optional;
 
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * Class for inventory item, which will be used to pass the hidden events
+ * <p>
+ * Contains a name, a texture for rendering and an associated event that they
+ * will be used with
+ */
 public class InventoryItem {
 
     private String name;

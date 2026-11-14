@@ -7,6 +7,12 @@ import com.github.goose_patrol.render.button.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manager for the render handler
+ * <p>
+ * For use with all classes to access attributes and methods of the render
+ * handler
+ */
 public class RenderManager {
 
     private String backgroundFile;
@@ -33,43 +39,42 @@ public class RenderManager {
         float buttonHeight = 60F;
 
         // SPLASH
-        buttons.add(new StartButton(renderHandler.camera.position.x  - (renderHandler.camera.viewportWidth / 8),
-            renderHandler.camera.position.y + 25 - (renderHandler.camera.viewportHeight / 2),
-            buttonWidth,
-            buttonHeight));
+        buttons.add(new StartButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
+                renderHandler.camera.position.y + 25 - (renderHandler.camera.viewportHeight / 2),
+                buttonWidth,
+                buttonHeight));
 
         // PAUSE
         buttons.add(new ResumeButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
-            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12),
-            buttonWidth,
-            buttonHeight));
+                renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12),
+                buttonWidth,
+                buttonHeight));
         buttons.add(new QuitButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
-            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6),
-            buttonWidth,
-            buttonHeight));
+                renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6),
+                buttonWidth,
+                buttonHeight));
 
         // WIN
         buttons.add(new RetryWinButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
-            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12) - 20,
-            buttonWidth,
-            buttonHeight));
+                renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12) - 20,
+                buttonWidth,
+                buttonHeight));
         buttons.add(new WinQuitButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
-            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6) - 20,
-            buttonWidth,
-            buttonHeight));
+                renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6) - 20,
+                buttonWidth,
+                buttonHeight));
 
         // LOSE
         buttons.add(new RetryButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
-            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12) - 20,
-            buttonWidth,
-            buttonHeight));
+                renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 12) - 20,
+                buttonWidth,
+                buttonHeight));
         buttons.add(new LoseQuitButton(renderHandler.camera.position.x - (renderHandler.camera.viewportWidth / 8),
-            renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6) - 20,
-            buttonWidth,
-            buttonHeight));
+                renderHandler.camera.position.y - (renderHandler.camera.viewportHeight / 6) - 20,
+                buttonWidth,
+                buttonHeight));
 
     }
-
 
     public List<Button> getButtons() {
         return buttons;
@@ -94,6 +99,5 @@ public class RenderManager {
     public GoosePatrol getInstance() {
         return this.instance;
     }
-
 
 }
