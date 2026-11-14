@@ -10,16 +10,16 @@ public class InventoryItem {
     private Texture imageItem;
     private Optional<Event> useEvent;
 
-
-
     public InventoryItem(String name, String imageItem, Optional<Event> useEvent) {
         this.name = name;
         this.imageItem = new Texture(imageItem);
-      
-//     public InventoryItem(String name, String imageItem, Optional<Event> useEvent) {
-//         this.name = name;
-//         this.imageItem = imageItem;
-//         this.useEvent = useEvent;
+        this.useEvent = useEvent;
+
+        // public InventoryItem(String name, String imageItem, Optional<Event> useEvent)
+        // {
+        // this.name = name;
+        // this.imageItem = imageItem;
+
     }
 
     public void useItem() {
@@ -32,14 +32,13 @@ public class InventoryItem {
         return name;
     }
 
-
     public Texture getImageItem() {
         return imageItem;
     }
-  
-//     public String getImageItem() {
-//         return imageItem;
-//     }
+
+    // public String getImageItem() {
+    // return imageItem;
+    // }
 
     public Optional<Event> getUseEvent() {
         return useEvent;
