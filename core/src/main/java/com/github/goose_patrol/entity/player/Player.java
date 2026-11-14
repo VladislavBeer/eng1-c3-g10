@@ -70,8 +70,19 @@ public class Player extends Entity {
             inventory[heldItemNumber].useItem(); //use the corresponding item if available
             inventory[heldItemNumber] = null; // Remove the item from the inventory after use
         }
-        super.tickEntity(delta);
 
+        // Update the current direction state based on movement
+        // Check if the player is moving in any direction
+        this.isMoving = dirX != 0 || dirY != 0;
+
+        // Update the player's state based on movement direction
+        if (isMoving) {
+            // player is moving, determine the direction based on deltaX and deltaY
+            this.setCurrentDirection(getDirectionState(dirX, dirY));
+        }
+
+
+        super.tickEntity(delta);
     }
 
     public void moveEntity(float deltaX, float deltaY, float delta, float mapWidth, float mapHeight) {
@@ -128,18 +139,6 @@ public class Player extends Entity {
         this.getEntityBoundingBox().setMaxX(this.posX + WIDTH);
         this.getEntityBoundingBox().setMinY(this.posY);
         this.getEntityBoundingBox().setMaxY(this.posY + HEIGHT);
-
-        // Update the current direction state based on movement
-        // Check if the player is moving in any direction
-        boolean isMoving = Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0;
-
-        // Update the player's state based on movement direction
-        if (isMoving) {
-            // player is moving, determine the direction based on deltaX and deltaY
-            this.setCurrentDirection(getDirectionState(deltaX, deltaY));
-        } else {
-            this.setCurrentDirection(directionState.S); // player is idle, set to south-facing direction
-        }
 
     }
 

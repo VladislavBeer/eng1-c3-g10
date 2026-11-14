@@ -18,6 +18,8 @@ public class Entity {
     private final TextureRegion entityTexture;
     protected GoosePatrol instance;
 
+    protected boolean isMoving;
+
     // enum used to track direction of movement, for animation purposes.
     protected enum directionState {
         W, E, NW, N, NE, SW, S, SE
@@ -56,9 +58,12 @@ public class Entity {
         return entityBoundingBox;
     }
 
-
     public TextureRegion getEntityTexture() {
         return this.entityTexture;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
     }
 
 
