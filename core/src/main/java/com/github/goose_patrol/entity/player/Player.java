@@ -39,7 +39,7 @@ public class Player extends Entity {
 
     public Player(float posX, float posY, InventoryItem[] initialInventory, String image, GoosePatrol instance) {
 
-        super(posX, posY, image,  new BoundingBox(posX, posX + WIDTH, posY, posY + HEIGHT), instance);
+        super(posX, posY, image, new BoundingBox(posX, posX + WIDTH, posY, posY + HEIGHT), instance);
         this.inventory = initialInventory;
         this.heldItemNumber = 0;
 
@@ -49,38 +49,49 @@ public class Player extends Entity {
 
     }
 
-    // On press of WASD / arrow keys, moves the player; Pressing keys 1, 2, 3, or 4 selects the corresponding item slot, the item event is triggered by pressing the ENTER key.
+    // On press of WASD / arrow keys, moves the player; Pressing keys 1, 2, 3, or 4
+    // selects the corresponding item slot, the item event is triggered by pressing
+    // the ENTER key.
     @Override
     public void tickEntity(float delta) {
 
-
         float dirX = 0;
         float dirY = 0;
-        if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)) dirX -= 1;
-        if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) dirX += 1;
-        if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) dirY -= 1;
-        if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) dirY += 1;
+        if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT))
+            dirX -= 1;
+        if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT))
+            dirX += 1;
+        if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN))
+            dirY -= 1;
+        if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP))
+            dirY += 1;
 
-        // check if the player was moving before this tick, to determine if we need to reset the state time (animation)
+        // check if the player was moving before this tick, to determine if we need to
+        // reset the state time (animation)
         boolean wasMoving = this.isMoving;
-        float oldPosX = posX, oldPosY = posY; // Store old position 
-        moveEntity(dirX, dirY, delta, this.instance.getRenderManager().getMaxX(), this.instance.getRenderManager().getMaxY());
+        float oldPosX = posX, oldPosY = posY; // Store old position
+        moveEntity(dirX, dirY, delta, this.instance.getRenderManager().getMaxX(),
+                this.instance.getRenderManager().getMaxY());
 
         // Check for inventory slot key presses (1-4)
-        if (Gdx.input.isKeyPressed(Keys.NUM_1)) heldItemNumber = 0;
-        if (Gdx.input.isKeyPressed(Keys.NUM_2)) heldItemNumber = 1;
-        if (Gdx.input.isKeyPressed(Keys.NUM_3)) heldItemNumber = 2;
-        if (Gdx.input.isKeyPressed(Keys.NUM_4)) heldItemNumber = 3;
-        if (Gdx.input.isKeyPressed(Keys.ENTER) && heldItemNumber >=0 && inventory != null && inventory[heldItemNumber] != null && inventory[heldItemNumber].getUseEvent().isPresent())
-        {
-            inventory[heldItemNumber].useItem(); //use the corresponding item if available
+        if (Gdx.input.isKeyPressed(Keys.NUM_1))
+            heldItemNumber = 0;
+        if (Gdx.input.isKeyPressed(Keys.NUM_2))
+            heldItemNumber = 1;
+        if (Gdx.input.isKeyPressed(Keys.NUM_3))
+            heldItemNumber = 2;
+        if (Gdx.input.isKeyPressed(Keys.NUM_4))
+            heldItemNumber = 3;
+        if (Gdx.input.isKeyPressed(Keys.ENTER) && heldItemNumber >= 0 && inventory != null
+                && inventory[heldItemNumber] != null && inventory[heldItemNumber].getUseEvent().isPresent()) {
+            inventory[heldItemNumber].useItem(); // use the corresponding item if available
             inventory[heldItemNumber] = null; // Remove the item from the inventory after use
             Number_Of_Items_Used++; // Increment the number of items used
         }
 
-
         // we need to update the current direction state based on movement
-        // 1 Check if the player is moving in any direction, by change from old position to new position
+        // 1 Check if the player is moving in any direction, by change from old position
+        // to new position
         this.isMoving = posX != oldPosX || posY != oldPosY;
 
         // 2 Update the player's state based on movement direction
@@ -88,7 +99,7 @@ public class Player extends Entity {
             // determine the direction based on deltaX and deltaY
             this.setCurrentDirection(getDirectionState(dirX, dirY));
         }
-        //else doesnt matter, no change from last direction if not moving,
+        // else doesnt matter, no change from last direction if not moving,
 
         // 3 Update the state time for animation purposes, flip if player stopped moving
         if (isMoving != wasMoving) {
@@ -157,13 +168,15 @@ public class Player extends Entity {
 
     }
 
-    // Load texture or animation based on the current direction state and movement status of the player
+    // Load texture or animation based on the current direction state and movement
+    // status of the player
     @Override
     public TextureRegion getEntityTexture() {
         directionState dir = getCurrentDirection();
         if (isMoving) {
             Animation<TextureRegion> anim = walkingAnimations.get(dir);
-            if (anim != null) return anim.getKeyFrame(stateTime, true);
+            if (anim != null)
+                return anim.getKeyFrame(stateTime, true);
         }
         return directionIdleTextures.get(dir);
     }
@@ -180,7 +193,8 @@ public class Player extends Entity {
             Texture sheet = new Texture(Gdx.files.internal(texturePath));
             sheet.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
             textures.add(sheet); // keep a list so you can dispose them later
-            // textures must be disposed of when the game ends to free up memory, this is a temporary solution until implement an AssetManager implementation.
+            // textures must be disposed of when the game ends to free up memory, this is a
+            // temporary solution until implement an AssetManager implementation.
 
             // Frame 0 = idle
             directionIdleTextures.put(d, new TextureRegion(sheet, 0, 0, frameW, frameH));
@@ -254,10 +268,12 @@ public class Player extends Entity {
 
     public int Get_Number_Of_Items_Used() {
         return Number_Of_Items_Used;
-      
+    }
+
     public float getStateTime() {
         return stateTime;
     }
+
     public void setStateTime(float stateTime) {
         this.stateTime = stateTime;
     }
