@@ -5,14 +5,15 @@ import java.util.EnumMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.Entity;
-import com.github.goose_patrol.util.Area;
-import com.github.goose_patrol.util.BoundingBox;
-import com.github.goose_patrol.util.InventoryItem;
-import com.github.goose_patrol.util.MapHelper;
+import com.github.goose_patrol.util.*;
 
 public class Player extends Entity {
 
@@ -23,17 +24,20 @@ public class Player extends Entity {
     public static final float WIDTH = 50f;
     public static final float HEIGHT = 60f;
     /** Walking speed in world units per second. */
-    public static float SPEED = 200f;
+    public static float SPEED = 1000f;
 
     /** Map of direction states to their corresponding textures */
-    EnumMap<directionState, Texture> directionTextures = new EnumMap<>(directionState.class);
+    EnumMap<directionState, TextureRegion> directionIdleTextures = new EnumMap<>(directionState.class);
+    /** Map of walking animation sheets to their corresponding direction states */
+    EnumMap<directionState, Animation<TextureRegion>> walkingAnimations = new EnumMap<>(directionState.class);
+    private final Array<Texture> textures = new Array<>(); // Keep track of loaded textures for disposal
 
     private InventoryItem[] inventory;
     private int heldItemNumber;
 
     public Player(float posX, float posY, InventoryItem[] initialInventory, String image, GoosePatrol instance) {
 
-        super(posX, posY, image, true, new BoundingBox(posX, posX + WIDTH, posY, posY + HEIGHT), instance);
+        super(posX, posY, image,  new BoundingBox(posX, posX + WIDTH, posY, posY + HEIGHT), instance);
         this.inventory = initialInventory;
         this.heldItemNumber = 0;
 
@@ -88,6 +92,27 @@ public class Player extends Entity {
         position.x = MathUtils.clamp(position.x, 0, mapWidth - WIDTH);
         position.y = MathUtils.clamp(position.y, 0, mapHeight - HEIGHT);
 
+        // Handles entity collisions
+        BoundingBox newBoundingBox = getEntityBoundingBox().clone();
+        newBoundingBox.setMinX(newBoundingBox.getMinX() + deltaX);
+        newBoundingBox.setMinY(newBoundingBox.getMinY() + deltaY);
+        newBoundingBox.setMaxX(newBoundingBox.getMaxX() + deltaX);
+        newBoundingBox.setMaxY(newBoundingBox.getMaxY() + deltaY);
+        if (MapHelper.isColliding(instance.getEntityManager(), newBoundingBox, this) == 1) {
+
+            position.x = posX;
+            position.y = posY;
+
+        }
+
+        if (MapHelper.isColliding(instance.getEntityManager(), newBoundingBox, this) == 2) {
+
+            instance.getRenderManager().refreshButtons();
+            instance.STATE = State.WIN;
+            return;
+
+        }
+
         Area moveIntoArea = MapHelper.getCurrentArea(position.x, position.y);
         if (moveIntoArea == Area.LAKE) {
 
@@ -120,28 +145,44 @@ public class Player extends Entity {
 
     // Load texture based on the current direction state of the player
     @Override
-    public Texture getEntityTexture() {
+    public TextureRegion getEntityTexture() {
         // Return the texture corresponding to the current direction state
-        return directionTextures.get(getCurrentDirection());
+        return directionIdleTextures.get(getCurrentDirection());
     }
 
     private void loadTextures() {
         // Load textures for each direction state
-        // assets stored at 'eng1-c3-g10\assets\Entity\Player'
+        // assets stored at 'eng1-c3-g10\assets\Player'
         // Should be handled by AssetManager in future but for now we can just load them
         // directly
+        final int frameW = 32, frameH = 32, frameCount = 5;
+
         for (directionState d : directionState.values()) {
-            String texturePath = "player/Player" + d.name() + ".png";
-            Texture texture = new Texture(Gdx.files.internal(texturePath));
-            directionTextures.put(d, texture);
+            String texturePath = "player/Player" + d.name() + "_spritesheet.png";
+            Texture sheet = new Texture(Gdx.files.internal(texturePath));
+            sheet.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+            textures.add(sheet); // keep a list so you can dispose them later
+            // textures must be disposed of when the game ends to free up memory, this is a temporary solution until implement an AssetManager implementation.
+
+            // Frame 0 = idle
+            directionIdleTextures.put(d, new TextureRegion(sheet, 0, 0, frameW, frameH));
+
+            // Frames 1..4 = walk cycle (use i = 0 if idle is part of the walk too)
+            Array<TextureRegion> frames = new Array<>();
+            for (int i = 1; i < frameCount; i++) {
+                frames.add(new TextureRegion(sheet, i * frameW, 0, frameW, frameH));
+            }
+
+            walkingAnimations.put(d, new Animation<>(0.1f, frames, Animation.PlayMode.LOOP));
         }
+
     }
 
     // Helper method to determine the direction state
     private directionState getDirectionState(float deltaX, float deltaY) {
 
         // Determine the sign of deltaX and deltaY to find the direction
-        // Should work if positive deltaY is north.
+        // Works as positive deltaY is north.
         int signX = deltaX > 0 ? 1 : (deltaX < 0 ? -1 : 0);
         int signY = deltaY > 0 ? 1 : (deltaY < 0 ? -1 : 0);
 
@@ -163,6 +204,16 @@ public class Player extends Entity {
             return directionState.W;
 
         return directionState.S; // default to south-facing if no movement
+    }
+
+    /**
+     * Disposes of all loaded Player textures to free up memory.
+     */
+    public void disposeTextures() {
+        for (Texture texture : textures) {
+            texture.dispose();
+        }
+        textures.clear();
     }
 
     public float getCenterX() {

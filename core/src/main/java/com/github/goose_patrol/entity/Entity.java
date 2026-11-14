@@ -1,6 +1,10 @@
 package com.github.goose_patrol.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.util.BoundingBox;
 
@@ -11,8 +15,7 @@ public class Entity {
     protected float posY;
     private String image;
     private BoundingBox entityBoundingBox;
-    private boolean active;
-    private final Texture entityTexture;
+    private final TextureRegion entityTexture;
     protected GoosePatrol instance;
 
     // enum used to track direction of movement, for animation purposes.
@@ -23,16 +26,20 @@ public class Entity {
     private float stateTime; // Time spent in current state, for future animation purposes.
 
 
-    public Entity(float posX, float posY, String image, boolean active, BoundingBox entityBoundingBox, GoosePatrol instance) {
+    public Entity(float posX, float posY, String image, BoundingBox entityBoundingBox, GoosePatrol instance) {
 
         this.posX = posX;
         this.posY = posY;
         this.image = image;
         this.instance = instance;
-        this.active = active;
         this.entityBoundingBox = entityBoundingBox;
-        this.entityTexture = new Texture(image);
+        this.entityTexture = new TextureRegion(new Texture(Gdx.files.internal(image)));
+        // debug
+        // System.out.println("Entity ctor: " + getClass().getSimpleName() + " image=" + image + " region=" + entityTexture.toString());
+    }
 
+    public boolean isStatic() {
+        return false; // default to false, override in subclasses
     }
 
     public void tickEntity(float delta) {
@@ -45,20 +52,15 @@ public class Entity {
     public float getPosY() {
         return posY;
     }
-    public String getImage() {
-        return image;
-    }
     public BoundingBox getEntityBoundingBox() {
         return entityBoundingBox;
     }
-    public boolean isActive() {
-        return active;
-    }
 
-    public Texture getEntityTexture() {
+
+    public TextureRegion getEntityTexture() {
         return this.entityTexture;
     }
-    
+
 
     // additional getters and setters for tracking direction and state time, for animation purposes
     public directionState getCurrentDirection() {
@@ -68,6 +70,6 @@ public class Entity {
         this.currentDirection = newDirection;
     }
     public float getStateTime() {
-        return stateTime;   
+        return stateTime;
     }
 }
