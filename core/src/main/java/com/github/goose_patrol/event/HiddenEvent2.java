@@ -22,6 +22,7 @@ public class HiddenEvent2 implements Event {
         for (int i = 0; i < 5; i++) {
             Goose goose = new Goose(randNum.nextFloat(850f, 950f),
                     randNum.nextFloat(650f, 750f), "goose/goosee.png", true, true, this.instance);
+            goose.Set_To_Follow(this.instance.getEntityManager().Get_Player());
             this.instance.getEntityManager().addEntity(goose);
         }
         hasTriggeed = true;

@@ -47,6 +47,8 @@ public class RenderHandler extends ScreenAdapter {
     private final Texture pauseMenuTexture;
     private final Texture loseMenuTexture;
     private final Texture mapTexture;
+    private final Texture Inventory_Slot;
+    private final Texture Inventory_Slot_Selected;
     private final Player player;
     private final RenderManager renderManager;
     private final HiddenEvent1 hiddenEvent1;
@@ -74,6 +76,8 @@ public class RenderHandler extends ScreenAdapter {
         this.pauseMenuTexture = new Texture("splash/pause.png");
         this.loseMenuTexture = new Texture("splash/lose.png");
         this.winTexture = new Texture("splash/win.png");
+        this.Inventory_Slot = new Texture("Inventory/slot_normal.png");
+        this.Inventory_Slot_Selected = new Texture("Inventory/slot_selected.png");
         this.renderManager = manager;
         this.hiddenEvent1 = new HiddenEvent1(manager.getInstance());
         this.hiddenEvent2 = new HiddenEvent2(manager.getInstance());
@@ -353,14 +357,14 @@ public class RenderHandler extends ScreenAdapter {
             for(int i =0;i<player.getInventory().length;i++){ // Drawing the items in the inventory
                 if (player.getHeldItem() == i)
                 {
-                    batch.draw(new Texture("Inventory/slot_selected.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                    batch.draw(Inventory_Slot_Selected,camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
                 }
                 else
                 {
-                    batch.draw(new Texture("Inventory/slot_normal.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                    batch.draw(Inventory_Slot,camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
                 }
                 if(player.getInventory()[i] != null){
-                    batch.draw(new Texture(player.getInventory()[i].getImageItem()),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                    batch.draw(player.getInventory()[i].getImageItem(),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
                 }
             }
         }

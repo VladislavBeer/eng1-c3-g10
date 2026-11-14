@@ -3,7 +3,9 @@ package com.github.goose_patrol.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.math.Vector2;
 import com.github.goose_patrol.GoosePatrol;
+import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.entity.staticentity.building.BuildingEntity;
 import com.github.goose_patrol.entity.staticentity.building.BusStopEntity;
 import com.github.goose_patrol.entity.staticentity.tree.*;
@@ -13,6 +15,54 @@ public class EntityManager {
 
     private GoosePatrol instance;
     private List<Entity> loadedEntities;
+    private Player playerEntity;
+    private final float NODE_REACH_DISTANCE = 15f;
+    private final float PLAYER_FOLLOW_DISTANCE = 180f;
+
+    // Array of graph nodes used for enemy navigation and pathfinding.
+    private Vector2[] Graph_Nodes = {
+        new Vector2(148, 150),
+        new Vector2(384, 150),
+        new Vector2(630, 150),
+        new Vector2(840, 150),
+        new Vector2(1017, 160),
+        new Vector2(1190, 176),
+        new Vector2(1264, 198),
+        new Vector2(1331, 258),
+        new Vector2(1369, 364),
+        new Vector2(1386, 588),
+        new Vector2(1376, 767),
+        new Vector2(1334, 898),
+        new Vector2(1299, 941),
+        new Vector2(1241, 970),
+        new Vector2(1078, 999),
+        new Vector2(807, 1005),
+        new Vector2(572, 1005),
+        new Vector2(347, 1005),
+        new Vector2(125, 998)
+    };
+
+    //Array of connections between graph nodes 
+    private Vector2[] Graph_Connections = {
+        new Vector2(0, 1),
+        new Vector2(1, 2),
+        new Vector2(2, 3),
+        new Vector2(3, 4),
+        new Vector2(4, 5),
+        new Vector2(5, 6),
+        new Vector2(6, 7),
+        new Vector2(7, 8),
+        new Vector2(8, 9),
+        new Vector2(9, 10),
+        new Vector2(10, 11),
+        new Vector2(11, 12),
+        new Vector2(12, 13),
+        new Vector2(13, 14),
+        new Vector2(14, 15),
+        new Vector2(15, 16),
+        new Vector2(16, 17),
+        new Vector2(17, 18)
+    };
 
     public EntityManager(GoosePatrol instance) {
         this.instance = instance;
@@ -62,6 +112,30 @@ public class EntityManager {
 
     public List<Entity> getEntities() {
         return this.loadedEntities;
+    }
+
+    public void Set_Player(Player player) {
+        this.playerEntity = player;
+    }
+
+    public Player Get_Player() {
+        return this.playerEntity;
+    }
+
+    public float Get_Node_Reach_Distance() {
+        return this.NODE_REACH_DISTANCE;
+    }
+
+    public float Get_Player_Follow_Distance() {
+        return this.PLAYER_FOLLOW_DISTANCE;
+    }
+
+    public Vector2[] Get_Graph_Nodes() {
+        return this.Graph_Nodes;
+    }
+
+    public Vector2[] Get_Graph_Connections() {
+        return this.Graph_Connections;
     }
 
 }

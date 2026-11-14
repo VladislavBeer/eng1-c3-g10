@@ -2,17 +2,19 @@ package com.github.goose_patrol.util;
 
 import java.util.Optional;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class InventoryItem {
 
     private String name;
-    private String imageItem;
+    private Texture imageItem;
     private Optional<Event> useEvent;
 
 
 
     public InventoryItem(String name, String imageItem) {
         this.name = name;
-        this.imageItem = imageItem;
+        this.imageItem = new Texture(imageItem);
         this.useEvent = Optional.empty();
     }
 
@@ -29,7 +31,7 @@ public class InventoryItem {
     }
 
 
-    public String getImageItem() {
+    public Texture getImageItem() {
         return imageItem;
     }
 

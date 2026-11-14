@@ -41,6 +41,7 @@ public class GoosePatrol extends Game {
         this.playerManager = new PlayerManager(player);
         this.entityManager = new EntityManager(this);
         this.entityManager.addEntity(player);
+        this.entityManager.Set_Player(player);
         this.renderManager = new RenderManager(this, 1600f, 1200f, player);
         this.STATE = State.PRE;
         setScreen(renderManager.getRenderHandler());
