@@ -1,5 +1,7 @@
 package com.github.goose_patrol.render;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
@@ -62,6 +64,7 @@ public class RenderHandler extends ScreenAdapter {
     private final FitViewport viewport = new FitViewport(VIEW_WIDTH, VIEW_HEIGHT, camera);
     private final ShapeRenderer shapes = new ShapeRenderer();
     private final SpriteBatch batch = new SpriteBatch();
+    private final ArrayList<Entity> tickTimeEntities;
 
     public RenderHandler(Player player, RenderManager manager) {
         this.player = player;
@@ -77,20 +80,12 @@ public class RenderHandler extends ScreenAdapter {
         this.renderManager = manager;
         this.hiddenEvent1 = new HiddenEvent1(manager.getInstance());
         this.hiddenEvent2 = new HiddenEvent2(manager.getInstance());
-//        this.buildingTexture = new Texture("static/building.png");
-//        this.busStopTexture = new Texture("static/bus_stop.png");
-//        this.tree1Texture = new Texture("static/Tree1.png");
-//        this.tree2Texture = new Texture("static/Tree2.png");
-//        this.tree3Texture = new Texture("static/Tree3.png");
-//        this.tree4Texture = new Texture("static/Tree4.png");
-//        this.tree5Texture = new Texture("static/Tree5.png");
-//        this.tree6Texture = new Texture("static/Tree6.png");
+        this.tickTimeEntities = new ArrayList<>();
     }
 
     Vector3 getMousePosGaame() {
         return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
     }
-
 
     @Override
     public void render(float delta) {
@@ -156,10 +151,16 @@ public class RenderHandler extends ScreenAdapter {
 
         this.renderManager.getInstance().getEntityManager().tickEntities(delta);
 
+        // Adding entities created during tick time
+        for (Entity e : tickTimeEntities) {
+            this.renderManager.getInstance().getEntityManager().addEntity(e);
+        }
+        tickTimeEntities.clear();
+
         if (this.player.getPosX() >= 1200f) {
-            this.hiddenEvent1.fire();
+            this.hiddenEvent1.activate();
         } else if (this.player.getPosY() >= 900f) {
-            this.hiddenEvent2.fire();
+            this.hiddenEvent2.activate();
         }
 
         // Keep the player centred but if they try walk past the edge, reset their
@@ -194,11 +195,13 @@ public class RenderHandler extends ScreenAdapter {
 
     private void renderLoseScreen() {
 
-        batch.draw(loseMenuTexture, camera.position.x - (camera.viewportWidth / 4), camera.position.y - (camera.viewportHeight / 4), camera.viewportWidth / 2, camera.viewportHeight / 2);
+        batch.draw(loseMenuTexture, camera.position.x - (camera.viewportWidth / 4),
+                camera.position.y - (camera.viewportHeight / 4), camera.viewportWidth / 2, camera.viewportHeight / 2);
 
     }
 
-    // Function to render the game screen, including the map, grid lines, and player.
+    // Function to render the game screen, including the map, grid lines, and
+    // player.
     private void draw() {
 
         ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1f);
@@ -347,8 +350,10 @@ public class RenderHandler extends ScreenAdapter {
                 {
                     batch.draw(new Texture("Inventory/slot_normal.png"),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
                 }
-                if(player.getInventory()[i] != null){
-                    batch.draw(new Texture(player.getInventory()[i].getImageItem()),camera.position.x-(100)+10+(i*30),camera.position.y-(camera.viewportHeight/2)+20,30,30);
+                if (player.getInventory()[i] != null) {
+                    batch.draw(new Texture(player.getInventory()[i].getImageItem()),
+                            camera.position.x - (100) + 10 + (i * 30),
+                            camera.position.y - (camera.viewportHeight / 2) + 20, 30, 30);
                 }
             }
         }
@@ -365,5 +370,9 @@ public class RenderHandler extends ScreenAdapter {
         shapes.dispose();
         batch.dispose();
         player.disposeTextures();
+    }
+
+    public void addTickTimeEntity(Entity entity) {
+        tickTimeEntities.add(entity);
     }
 }
