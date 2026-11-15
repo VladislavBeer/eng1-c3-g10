@@ -341,6 +341,9 @@ public class RenderHandler extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         for (Entity e : renderManager.getInstance().getEntityManager().getEntities()) {
 
+            // use the entity's texture region to draw it at its position with its bounding box size.
+            // If you use the entity's texture directly, scaling might not work as expected, and animated sprites might not display correctly. 
+            // Using the texture region ensures that the correct portion of the texture is drawn, especially if the entity has animations or different states.
             TextureRegion region = e.getEntityTexture();
             if (region == null)
                 continue; // Skip rendering if the texture is null
@@ -406,7 +409,7 @@ public class RenderHandler extends ScreenAdapter {
     public void dispose() {
         shapes.dispose();
         batch.dispose();
-        player.disposeTextures();
+        player.dispose();
     }
 
     public void addTickTimeEntity(Entity entity) {
