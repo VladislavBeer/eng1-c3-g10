@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.player.Player;
+//import com.github.goose_patrol.entity.player.Player;
 import com.github.goose_patrol.util.Area;
 import com.github.goose_patrol.util.BoundingBox;
 import com.github.goose_patrol.util.MapHelper;
@@ -153,7 +154,7 @@ public class Goose extends Entity {
 
             float targetDistance = Goose_Position.dst(targetPosition);
 
-            if (targetDistance <= PLAYER_FOLLOW_DISTANCE) { // 1. DIRECT ENTITY FOLLOWING
+            if (targetDistance <= PLAYER_FOLLOW_DISTANCE || !(Entity_To_Follow instanceof Player)) { // 1. DIRECT ENTITY FOLLOWING
                 Vector2 direction = new Vector2(targetPosition).sub(Goose_Position);
 
                 if (direction.len2() > 0.001f) {
