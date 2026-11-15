@@ -59,10 +59,6 @@ public class MapHelper {
 
                     return 2;
 
-                } else if (e instanceof Goose)
-                    System.out.println("collision with goose detected");
-                else if (e instanceof StaticEntity) {
-                    System.out.println("Collision with tree or other detected");
                 }
                 return 1;
             }

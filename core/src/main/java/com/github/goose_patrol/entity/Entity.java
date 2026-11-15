@@ -29,6 +29,7 @@ public class Entity {
     protected enum directionState {
         W, E, NW, N, NE, SW, S, SE
     }
+
     private directionState currentDirection;
     private float stateTime; // Time spent in current state, for future animation purposes.
 
@@ -96,5 +97,9 @@ public class Entity {
     }
 
     public void Set_To_Follow(Entity entity) {
+    }
+
+    public void setBoundingBox(BoundingBox newBoundingBox) {
+        this.entityBoundingBox = newBoundingBox;
     }
 }

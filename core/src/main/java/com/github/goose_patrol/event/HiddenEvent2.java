@@ -28,7 +28,7 @@ public class HiddenEvent2 implements Event {
         this.instance = instance;
     }
 
-    /** sets goose target to null so they will stop following */
+    /** sets goose target to a point in the lake so they run away from the phone */
     public void fire() {
         List<Entity> entities = instance.getEntityManager().getEntities();
 
@@ -36,12 +36,16 @@ public class HiddenEvent2 implements Event {
             Entity entity = entities.get(i);
 
             if (entity instanceof Goose) {
-                //Vector2 Goose_Position = new Vector2(entity.getPosX(), entity.getPosY());
-                //Vector2 Player_Position = new Vector2(instance.getEntityManager().Get_Player().getPosX(),
-                        //.getEntityManager().Get_Player().getPosY());
-                //if (Goose_Position.dst(Player_Position) < 200f) {
-                entity.Set_To_Follow(null);
-                //}
+                // Vector2 Goose_Position = new Vector2(entity.getPosX(), entity.getPosY());
+                // Vector2 Player_Position = new
+                // Vector2(instance.getEntityManager().Get_Player().getPosX(),
+                // .getEntityManager().Get_Player().getPosY());
+                // if (Goose_Position.dst(Player_Position) < 200f) {
+                Entity convergePoint = new Entity(800, 600, "Items/music_phone.png",
+                        new BoundingBox(800, 600, 801, 601), instance);
+                this.instance.getRenderManager().getRenderHandler().addTickTimeEntity(convergePoint);
+                entity.Set_To_Follow(convergePoint);
+                // }
             }
         }
     }

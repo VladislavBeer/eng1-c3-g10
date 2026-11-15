@@ -31,7 +31,7 @@ public class HiddenEvent1 implements Event {
      * to bread
      */
     public void fire() {
-        Entity Bread_Entity = new Entity(400f, 450f, "Items/bread.png", new BoundingBox(400f, 425f, 450f, 475f),
+        Entity Bread_Entity = new Entity(1100f, 400f, "Items/bread.png", new BoundingBox(1100f, 1125f, 400f, 425f),
                 instance);
         this.instance.getRenderManager().getRenderHandler().addTickTimeEntity(Bread_Entity);
 
@@ -41,12 +41,13 @@ public class HiddenEvent1 implements Event {
             Entity entity = entities.get(i);
 
             if (entity instanceof Goose) {
-                //Vector2 Goose_Position = new Vector2(entity.getPosX(), entity.getPosY());
-                //Vector2 Player_Position = new Vector2(instance.getEntityManager().Get_Player().getPosX(),
-                        //instance.getEntityManager().Get_Player().getPosY());
-                //if (Goose_Position.dst(Player_Position) < 200f) {
+                // Vector2 Goose_Position = new Vector2(entity.getPosX(), entity.getPosY());
+                // Vector2 Player_Position = new
+                // Vector2(instance.getEntityManager().Get_Player().getPosX(),
+                // instance.getEntityManager().Get_Player().getPosY());
+                // if (Goose_Position.dst(Player_Position) < 200f) {
                 entity.Set_To_Follow(Bread_Entity);
-                //}
+                // }
             }
         }
     }
