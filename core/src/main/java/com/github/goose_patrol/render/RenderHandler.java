@@ -85,7 +85,7 @@ public class RenderHandler extends ScreenAdapter {
         viewport.apply();
         this.font = new BitmapFont();
         ticksRemaining = 6000;
-        this.mapTexture = new Texture("static/map_base.png");
+        this.mapTexture = new Texture("Static/map_base.png");
         this.splashTexture = new Texture("splash/splash.png");
         this.pauseMenuTexture = new Texture("splash/pause.png");
         this.loseMenuTexture = new Texture("splash/lose.png");

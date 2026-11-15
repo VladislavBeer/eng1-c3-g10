@@ -8,7 +8,7 @@ import com.github.goose_patrol.util.BoundingBox;
 public class TreeEntity4 extends StaticEntity {
 
     public TreeEntity4(float posX, float posY, BoundingBox entityBoundingBox, GoosePatrol instance) {
-        super(posX, posY, "static/Tree4.png", entityBoundingBox, instance);
+        super(posX, posY, "Static/Tree4.png", entityBoundingBox, instance);
     }
 
 }

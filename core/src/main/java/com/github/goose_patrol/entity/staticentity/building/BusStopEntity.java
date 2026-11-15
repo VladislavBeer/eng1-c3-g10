@@ -8,7 +8,7 @@ import com.github.goose_patrol.util.BoundingBox;
 public class BusStopEntity extends StaticEntity {
 
     public BusStopEntity(float posX, float posY, BoundingBox entityBoundingBox, GoosePatrol instance) {
-        super(posX, posY, "static/bus_stop.png", entityBoundingBox, instance);
+        super(posX, posY, "Static/bus_stop.png", entityBoundingBox, instance);
     }
 
 }

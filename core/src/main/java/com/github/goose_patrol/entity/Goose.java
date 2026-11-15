@@ -72,7 +72,7 @@ public class Goose extends Entity {
         final int frameW = 32, frameH = 32, frameCount = 5;
 
         for (directionState d : directionState.values()) {
-            String texturePath = "goose/Goose" + d.name() + "_spritesheet.png";
+            String texturePath = "Goose/Goose" + d.name() + "_spritesheet.png";
             Texture sheet = new Texture(Gdx.files.internal(texturePath));
             sheet.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
             textures.add(sheet); // keep a list so you can dispose them later
