@@ -4,7 +4,7 @@
 
 Private repository for our Engineering 1 (COM00019I) team project at the University of York.
 
-**Project website:** ([https://github.com/VladislavBeer/eng1-c3-g10/](https://vladislavbeer.github.io/eng1-c3-g10/))
+**Project website:** ([https://github.com/VladislavBeer/eng1-c3-g10/](https://vladislavbeer.github.io/eng1-c3-g10/WebSite/index.html))
 
 --- 
 ## Assessment 1 deliverables
