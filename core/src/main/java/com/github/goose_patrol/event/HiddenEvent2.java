@@ -1,6 +1,6 @@
 package com.github.goose_patrol.event;
 
-import com.badlogic.gdx.math.Vector2;
+//import com.badlogic.gdx.math.Vector2;
 import com.github.goose_patrol.GoosePatrol;
 import com.github.goose_patrol.entity.Goose;
 import com.github.goose_patrol.entity.player.Player;
@@ -36,12 +36,12 @@ public class HiddenEvent2 implements Event {
             Entity entity = entities.get(i);
 
             if (entity instanceof Goose) {
-                Vector2 Goose_Position = new Vector2(entity.getPosX(), entity.getPosY());
-                Vector2 Player_Position = new Vector2(instance.getEntityManager().Get_Player().getPosX(),
-                        instance.getEntityManager().Get_Player().getPosY());
-                if (Goose_Position.dst(Player_Position) < 200f) {
-                    entity.Set_To_Follow(null);
-                }
+                //Vector2 Goose_Position = new Vector2(entity.getPosX(), entity.getPosY());
+                //Vector2 Player_Position = new Vector2(instance.getEntityManager().Get_Player().getPosX(),
+                        //.getEntityManager().Get_Player().getPosY());
+                //if (Goose_Position.dst(Player_Position) < 200f) {
+                entity.Set_To_Follow(null);
+                //}
             }
         }
     }
