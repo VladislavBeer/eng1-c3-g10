@@ -2,7 +2,7 @@
 
 #### Goose Patrol
 
-Private repository for our Engineering 1 (COM00019I) team project at the University of York.
+Public repository for our Engineering 1 (COM00019I) team project at the University of York.
 
 **Project website:** ([https://github.com/VladislavBeer/eng1-c3-g10/WebSite](https://vladislavbeer.github.io/eng1-c3-g10/WebSite/index.html))
 
@@ -16,7 +16,7 @@ Private repository for our Engineering 1 (COM00019I) team project at the Univers
 | Method selection and planning  | `docs/Plan1.pdf`              |
 | Risk assessment and mitigation | `docs/Risk1.pdf`              |
 | Implementation report          | `docs/Impl1.pdf`              |
-| Executable JAR                 | `releases/[Goose-Patrol].jar` |
+| Executable JAR                 | `Available on the Website` |
 
 ## Running the game
 
