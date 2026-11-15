@@ -23,8 +23,8 @@ public class GoosePatrol extends Game {
     private RenderManager renderManager;
     private PlayerManager playerManager;
     private EntityManager entityManager;
-    // private AssetManager assetManager; for future use if we want to load assets
-    // asynchronously
+    // private AssetManager assetManager; 
+    // ^ for future use if we want to load assets asynchronously (Much better for performance, but more complex to implement)
     public State STATE;
 
     @Override

@@ -29,7 +29,6 @@ public class Entity {
     protected enum directionState {
         W, E, NW, N, NE, SW, S, SE
     }
-
     private directionState currentDirection;
     private float stateTime; // Time spent in current state, for future animation purposes.
 
