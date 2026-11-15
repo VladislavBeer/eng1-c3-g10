@@ -3,6 +3,7 @@ package com.github.goose_patrol.util;
 import com.github.goose_patrol.entity.Entity;
 import com.github.goose_patrol.entity.EntityManager;
 import com.github.goose_patrol.entity.Goose;
+import com.github.goose_patrol.entity.staticentity.StaticEntity;
 import com.github.goose_patrol.entity.staticentity.building.BusStopEntity;
 
 import java.util.HashMap;
@@ -38,10 +39,7 @@ public class MapHelper {
             // bounding box of the geese
             BoundingBox b = e.getEntityBoundingBox().clone();
             if (e instanceof Goose) {
-                b.setMinX(b.getMinX() + 25);
-                b.setMaxX(b.getMaxX() - 25);
-                b.setMinY(b.getMinY() + 5);
-                b.setMaxY(b.getMaxY() - 5);
+                b.setMaxY(b.getMaxY() + 10);
             }
 
             if (e instanceof BusStopEntity) {
@@ -52,16 +50,20 @@ public class MapHelper {
             }
 
             if (eb.getMinX() < b.getMaxX() &&
-                    eb.getMinY() > b.getMinX() &&
-                    eb.getMinY() < b.getMaxY() &&
-                    eb.getMinY() > b.getMinY()) {
+                    eb.getMinX() > b.getMinX() - 2 &&
+                    eb.getMinY() > b.getMinY() - 2 &&
+                    eb.getMinY() < b.getMaxY() - 2 &&
+                    eb.getMaxX() > b.getMinX() - 2) {
 
                 if (e instanceof BusStopEntity) {
 
                     return 2;
 
+                } else if (e instanceof Goose)
+                    System.out.println("collision with goose detected");
+                else if (e instanceof StaticEntity) {
+                    System.out.println("Collision with tree or other detected");
                 }
-
                 return 1;
             }
 

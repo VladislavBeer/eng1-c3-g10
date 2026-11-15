@@ -95,16 +95,16 @@ public class EntityManager {
         loadedEntities.add(new TreeEntity1(1490, 50, new BoundingBox(1490, (1490 + 70), 50, (50 + 160)), instance));
         loadedEntities
                 .add(new TreeEntity2(1300, 1100, new BoundingBox(1300, (1300 + 90), 1100, (1100 + 100)), instance));
-        loadedEntities.add(new TreeEntity3(575, 330, new BoundingBox(575, (575 + 78), 330, (330 + 90)), instance));
-        loadedEntities.add(new TreeEntity3(760, 370, new BoundingBox(760, (760 + 81), 370, (370 + 100)), instance));
-        loadedEntities.add(new TreeEntity3(1000, 450, new BoundingBox(1000, (1000 + 82), 450, (450 + 70)), instance));
-        loadedEntities.add(new TreeEntity3(1220, 650, new BoundingBox(1220, (1220 + 76), 650, (650 + 80)), instance));
+        loadedEntities.add(new TreeEntity3(575, 330, new BoundingBox(575, (575 + 80), 330, (330 + 90)), instance));
+        loadedEntities.add(new TreeEntity3(760, 370, new BoundingBox(760, (760 + 80), 370, (370 + 100)), instance));
+        loadedEntities.add(new TreeEntity3(1000, 450, new BoundingBox(1000, (1000 + 80), 450, (450 + 70)), instance));
+        loadedEntities.add(new TreeEntity3(1220, 650, new BoundingBox(1220, (1220 + 80), 650, (650 + 80)), instance));
         loadedEntities.add(new TreeEntity4(1000, 800, new BoundingBox(1000, (1000 + 90), 800, (800 + 150)), instance));
         loadedEntities.add(new TreeEntity4(1090, 750, new BoundingBox(1090, (1090 + 100), 750, (750 + 160)), instance));
         loadedEntities.add(new TreeEntity4(1170, 820, new BoundingBox(1170, (1170 + 110), 820, (820 + 110)), instance));
         loadedEntities.add(new TreeEntity5(1200, 290, new BoundingBox(1200, (1200 + 80), 290, (290 + 75)), instance));
         loadedEntities.add(new TreeEntity5(1000, 360, new BoundingBox(1000, (1000 + 80), 360, (360 + 100)), instance));
-        loadedEntities.add(new TreeEntity5(1156, 420, new BoundingBox(1156, (1156 + 80), 420, (420 + 75)), instance));
+        loadedEntities.add(new TreeEntity5(1155, 420, new BoundingBox(1155, (1155 + 80), 420, (420 + 75)), instance));
         loadedEntities.add(new TreeEntity6(190, 800, new BoundingBox(190, (190 + 120), 800, (800 + 140)), instance));
         loadedEntities.add(new TreeEntity6(325, 820, new BoundingBox(325, (325 + 110), 820, (820 + 130)), instance));
         loadedEntities.add(new TreeEntity6(430, 1080, new BoundingBox(430, (430 + 90), 1080, (1080 + 110)), instance));
