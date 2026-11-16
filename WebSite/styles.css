@@ -1,4 +1,3 @@
-/* ---------- Base styles ---------- */
 :root {
   --ink: #172033;
   --muted: #647084;
@@ -20,7 +19,6 @@ body {
 }
 a { color: inherit; }
 
-/* ---------- Full-width top banner ---------- */
 .hero {
   position: relative;
   width: 100%;
@@ -75,7 +73,6 @@ a { color: inherit; }
   font-size: 1.1rem;
 }
 
-/* ---------- Buttons and sections ---------- */
 .button {
   display: inline-flex;
   align-items: center;
@@ -105,7 +102,6 @@ h2 {
 .intro p:not(.eyebrow) { color: var(--muted); }
 .intro .lead { color: #39465a; font-size: 1.2rem; }
 
-/* ---------- Documentation cards ---------- */
 .documents { padding-top: 25px; }
 .section-heading {
   display: flex;
@@ -150,7 +146,6 @@ h2 {
 .card-link { color: #98631d; font-size: .9rem; font-weight: 700; }
 .featured-card { background: #fffaf1; border-color: #eed9b6; }
 
-/* ---------- Repository strip ---------- */
 .repository-strip {
   display: flex;
   align-items: center;
@@ -162,7 +157,6 @@ h2 {
 .repository-strip h2 { font-size: 1.8rem; }
 .repository-strip p:not(.eyebrow) { max-width: 650px; margin-bottom: 0; color: var(--muted); }
 
-/* ---------- Bottom resource hub ---------- */
 .resource-hub {
   margin-top: 20px;
   margin-bottom: 35px;
@@ -189,7 +183,6 @@ h2 {
 }
 .hub-grid a:hover { color: #f2c477; }
 
-/* ---------- Footer ---------- */
 footer {
   display: flex;
   align-items: center;
@@ -204,7 +197,6 @@ footer p { margin: 0; }
 .footer-brand { color: white; font-weight: 800; text-decoration: none; }
 .back-top { color: white; text-decoration: none; }
 
-/* ---------- Individual document pages ---------- */
 .page-header {
   position: relative;
   width: 100%;
